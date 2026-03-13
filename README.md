@@ -1,59 +1,213 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+### Пример `README.md` для запуска проекта (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```markdown
+# Официальный сайт администрации Сергиево‑Посадского городского округа
 
-## About Laravel
+Веб‑приложение на Laravel, реализующее официальный сайт администрации: новости, раздел «Администрация», документы и финансы, обращения граждан, антикоррупционные сообщения, справочная информация, вакансии, кабинет сотрудника и администратора.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 1. Требования
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP **8.2+** (с расширениями `mbstring`, `openssl`, `pdo_mysql`, `fileinfo`, `tokenizer`, `curl`)
+- Composer **2+**
+- MySQL / MariaDB
+- Node.js **18+** (для сборки фронтенда, если понадобится)
+- Git (для клонирования репозитория)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 2. Установка
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 2.1. Клонирование репозитория
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone https://github.com/<ваш-логин>/<название-репозитория>.git
+cd <название-репозитория>
+```
 
-## Laravel Sponsors
+(Если проект уже лежит локально — просто зайдите в папку, например  
+`cd c:\Users\simon\Desktop\app`.)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2.2. Установка PHP‑зависимостей
 
-### Premium Partners
+```bash
+composer install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2.3. Установка JS‑зависимостей (по необходимости)
 
-## Contributing
+Если нужно пересобирать фронтенд (CSS/JS):
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+npm install
+# для разработки
+npm run dev
+# либо для продакшен‑сборки
+npm run build
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 3. Настройка окружения
 
-## Security Vulnerabilities
+### 3.1. Файл `.env`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Скопируйте пример и отредактируйте под себя:
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Откройте `.env` и настройте:
+
+```dotenv
+APP_NAME="Sergiev Posad"
+APP_ENV=local
+APP_KEY=            # сгенерируем ниже
+APP_DEBUG=true
+APP_URL=http://localhost
+
+# Подключение к БД
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sergiev_posad
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+```
+
+Сгенерируйте ключ приложения:
+
+```bash
+php artisan key:generate
+```
+
+Создайте базу данных `sergiev_posad` (или другую, указанную в `.env`) в MySQL.
+
+---
+
+## 4. Миграции и сиды
+
+### 4.1. Запуск миграций
+
+```bash
+php artisan migrate
+```
+
+### 4.2. Заполнение начальными данными
+
+Проект содержит сидеры для ролей, разделов статей, администрации, подразделений, учреждений, территорий, ГО и ЧС, совета депутатов и почётных граждан.
+
+```bash
+php artisan db:seed
+```
+
+> Если при повторном запуске сидов появится ошибка вида  
+> `Duplicate entry 'admin@example.com' for key 'users_email_unique'` — это значит, что тестовый администратор уже создан, на работу сайта это не влияет.
+
+---
+
+## 5. Хранилище файлов
+
+Для корректной работы загрузки фотографий, файлов и т.п. создайте симлинк:
+
+```bash
+php artisan storage:link
+```
+
+После этого файлы из `storage/app/public` будут доступны по `public/storage`.
+
+---
+
+## 6. Запуск приложения
+
+### 6.1. Локальный сервер Laravel
+
+```bash
+php artisan serve
+```
+
+По умолчанию сайт будет доступен по адресу:
+
+```text
+http://127.0.0.1:8000
+```
+
+### 6.2. Сборка фронтенда (опционально)
+
+Во время разработки можно держать Vite в режиме watch:
+
+```bash
+npm run dev
+```
+
+Для продакшена:
+
+```bash
+npm run build
+```
+
+---
+
+## 7. Учётные записи по умолчанию
+
+При первичном выполнении `php artisan db:seed` создаются тестовые пользователи:
+
+- **Администратор**  
+  - email: `admin@example.com`  
+  - пароль: `password`
+
+- **Сотрудник**  
+  - email: `employee@example.com`  
+  - пароль: `password`
+
+- **Обычный пользователь**  
+  - email: `user@example.com`  
+  - пароль: `password`
+
+Роли: администратор имеет доступ к `/admin/*`, сотрудник — к `/staff/*`, пользователь — к подаче обращений и антикоррупционных сообщений.
+
+---
+
+## 8. Основные маршруты
+
+- `/` — главная страница (новости, обращение, полезные разделы)
+- `/news` — новости
+- `/administration` — администрация округа
+- `/documents` — документы
+- `/finance` — финансы
+- `/reference` — справочная информация
+- `/ecology` — экология
+- `/appeals/work` — информация о приёме обращений
+- `/appeals` — подача и просмотр обращений (для авторизованных)
+- `/appeals/anticorruption` — антикоррупционные сообщения
+- `/admin/*` — панель администратора
+- `/staff/*` — кабинет сотрудника (контент, обращения и т.п.)
+
+---
+
+## 9. Полезные команды
+
+- Очистка кэша конфигурации/маршрутов/представлений:
+  ```bash
+  php artisan config:clear
+  php artisan route:clear
+  php artisan view:clear
+  ```
+- Перезапуск очередей (если будут использоваться):
+  ```bash
+  php artisan queue:restart
+  ```
+
+---
+
+## 10. Развёртывание
+
+Для боевого сервера:
+
+- Установить PHP 8.2+, Composer, Node.js (для сборки фронта).
+- Настроить веб‑сервер (Nginx/Apache) на директорию `public/`.
+- Скопировать `.env`, выполнить `composer install`, `php artisan migrate --force`, `php artisan db:seed` (по необходимости), `php artisan storage:link`, `npm run build`.
+- Включить `APP_ENV=production`, `APP_DEBUG=false`.
+
+Подробнее — в официальной документации Laravel: `https://laravel.com/docs/deployment`.
+```
