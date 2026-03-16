@@ -134,6 +134,7 @@
                 <a href="{{ route('staff.appeals.index') }}" class="user-dropdown-link">Обращения граждан</a>
                 <a href="{{ route('staff.anticorruption.index') }}" class="user-dropdown-link">Сообщения об антикоррупции</a>
               @endif
+              <a href="{{ route('profile') }}" class="user-dropdown-link">Сменить пароль</a>
               <form method="POST" action="{{ route('logout') }}" class="user-dropdown-form">
                 @csrf
                 <button type="submit" class="user-dropdown-link user-dropdown-logout">Выйти</button>
@@ -141,8 +142,10 @@
             </div>
           </div>
         @else
-          <a href="{{ route('login') }}" class="auth-link">Войти</a>
-          <a href="{{ route('register') }}" class="auth-link register-link">Регистрация</a>
+          <div class="auth-section-guest">
+            <a href="{{ route('login') }}" class="auth-link auth-link-btn">Войти</a>
+            <a href="{{ route('register') }}" class="auth-link auth-link-btn register-link">Регистрация</a>
+          </div>
         @endauth
       </div>
     </div>
@@ -167,7 +170,7 @@
             <span class="mobile-user-name">{{ Auth::user()->name }}</span>
           </div>
         @else
-          <div class="mobile-auth-links">
+          <div class="mobile-user-info mobile-auth-links-wrap">
             <a href="{{ route('login') }}" class="mobile-auth-link">Войти</a>
             <a href="{{ route('register') }}" class="mobile-auth-link">Регистрация</a>
           </div>
@@ -317,6 +320,7 @@
               <a href="{{ route('staff.appeals.index') }}" class="mobile-controls-link">Обращения граждан</a>
               <a href="{{ route('staff.anticorruption.index') }}" class="mobile-controls-link">Сообщения об антикоррупции</a>
             @endif
+            <a href="{{ route('profile') }}" class="mobile-controls-link">Сменить пароль</a>
             <form method="POST" action="{{ route('logout') }}" class="mobile-controls-form">
             @csrf
             <button type="submit" class="mobile-controls-link mobile-controls-logout">Выйти</button>

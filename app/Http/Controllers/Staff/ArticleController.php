@@ -15,6 +15,13 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $sectionId = $request->get('section_id');
+        $sectionSlug = $request->get('section');
+        if ($sectionSlug) {
+            $section = ArticleSection::where('slug', $sectionSlug)->first();
+            if ($section) {
+                $sectionId = $section->id;
+            }
+        }
         $query = Article::with(['section', 'user'])->orderByDesc('updated_at');
 
         if ($sectionId) {
@@ -23,14 +30,23 @@ class ArticleController extends Controller
 
         $articles = $query->paginate(15);
         $sections = ArticleSection::orderBy('sort_order')->get();
+        $filterSectionId = $sectionId; // для сохранения выбора в фильтре при ?section=go-chs
 
-        return view('staff.articles.index', compact('articles', 'sections'));
+        return view('staff.articles.index', compact('articles', 'sections', 'filterSectionId'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $sections = ArticleSection::orderBy('sort_order')->get();
-        return view('staff.articles.create', compact('sections'));
+        $defaultSectionSlug = $request->get('section');
+        $defaultSectionId = null;
+        if ($defaultSectionSlug) {
+            $sec = ArticleSection::where('slug', $defaultSectionSlug)->first();
+            if ($sec) {
+                $defaultSectionId = $sec->id;
+            }
+        }
+        return view('staff.articles.create', compact('sections', 'defaultSectionId'));
     }
 
     public function store(Request $request)
@@ -67,7 +83,9 @@ class ArticleController extends Controller
             }
         }
 
-        return redirect()->route('staff.articles.index')
+        $sectionSlug = $article->section?->slug;
+        $query = $sectionSlug ? ['section' => $sectionSlug] : [];
+        return redirect()->route('staff.articles.index', $query)
             ->with('success', 'Статья создана');
     }
 
@@ -114,7 +132,9 @@ class ArticleController extends Controller
             }
         }
 
-        return redirect()->route('staff.articles.index')
+        $sectionSlug = $article->section?->slug;
+        $query = $sectionSlug ? ['section' => $sectionSlug] : [];
+        return redirect()->route('staff.articles.index', $query)
             ->with('success', 'Статья обновлена');
     }
 
@@ -126,8 +146,10 @@ class ArticleController extends Controller
         foreach ($article->files as $file) {
             Storage::disk('public')->delete($file->path);
         }
+        $sectionSlug = $article->section?->slug;
         $article->delete();
-        return redirect()->route('staff.articles.index')
+        $query = $sectionSlug ? ['section' => $sectionSlug] : [];
+        return redirect()->route('staff.articles.index', $query)
             ->with('success', 'Статья удалена');
     }
 

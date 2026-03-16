@@ -24,13 +24,24 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'role_id' => 'required|exists:roles,id',
+        ];
+        if ($request->filled('password')) {
+            $rules['password'] = 'required|string|min:8|confirmed';
+        }
+        $request->validate($rules, [
+            'password.min' => 'Пароль должен быть не менее 8 символов.',
+            'password.confirmed' => 'Пароль и подтверждение не совпадают.',
         ]);
 
-        $user->update($request->only('name', 'email', 'role_id'));
+        $user->fill($request->only('name', 'email', 'role_id'));
+        if ($request->filled('password')) {
+            $user->password = $request->password; // cast 'hashed' on User model will hash it
+        }
+        $user->save();
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Пользователь успешно обновлен');

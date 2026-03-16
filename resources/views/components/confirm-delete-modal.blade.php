@@ -89,11 +89,12 @@ body.a11y-mode .confirm-delete-modal-message { color: #000; }
     var modal = document.getElementById('confirmDeleteModal');
     var messageEl = document.getElementById('confirmDeleteModalMessage');
     var submitBtn = document.getElementById('confirmDeleteModalSubmit');
-    var pendingForm = null;
+    var pendingFormId = null;
 
-    function openModal(message) {
-        if (!modal) return;
-        pendingForm = null;
+    function openModal(message, form) {
+        if (!modal || !form) return;
+        pendingFormId = form.id || ('confirm-delete-form-' + Date.now());
+        if (!form.id) form.id = pendingFormId;
         messageEl.textContent = message || 'Вы уверены, что хотите удалить?';
         modal.removeAttribute('hidden');
         modal.setAttribute('aria-hidden', 'false');
@@ -106,12 +107,14 @@ body.a11y-mode .confirm-delete-modal-message { color: #000; }
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
         modal.setAttribute('hidden', '');
-        pendingForm = null;
+        pendingFormId = null;
     }
 
-    function confirmSubmit() {
-        if (pendingForm) {
-            pendingForm.submit();
+    function confirmSubmit(e) {
+        e.preventDefault();
+        var form = pendingFormId ? document.getElementById(pendingFormId) : null;
+        if (form) {
+            form.submit();
         }
         closeModal();
     }
@@ -120,10 +123,10 @@ body.a11y-mode .confirm-delete-modal-message { color: #000; }
         var btn = e.target.closest('.js-confirm-delete');
         if (btn && btn.type === 'submit') {
             e.preventDefault();
+            e.stopPropagation();
             var form = btn.closest('form');
             if (!form) return;
-            pendingForm = form;
-            openModal(btn.getAttribute('data-confirm-message') || 'Вы уверены, что хотите удалить?');
+            openModal(btn.getAttribute('data-confirm-message') || 'Вы уверены, что хотите удалить?', form);
         }
         if (e.target.closest('[data-dismiss="modal"]')) {
             closeModal();

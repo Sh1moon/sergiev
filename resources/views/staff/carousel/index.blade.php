@@ -25,11 +25,14 @@
         @forelse($slides as $slide)
         <div class="carousel-slide-item">
             <img src="{{ asset('storage/' . $slide->image) }}" alt="">
-            <form action="{{ route('staff.carousel.destroy', $slide) }}" method="POST" style="margin-top: 8px;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm js-confirm-delete" data-confirm-message="Удалить слайд?">Удалить</button>
-            </form>
+            <div class="carousel-slide-actions" style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px;">
+                <a href="{{ route('staff.carousel.edit', $slide) }}" class="btn btn-warning btn-sm">Изменить</a>
+                <form id="carousel-delete-form-{{ $slide->id }}" action="{{ route('staff.carousel.destroy', $slide) }}" method="POST" style="margin: 0;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm js-confirm-delete" data-confirm-message="Удалить слайд?">Удалить</button>
+                </form>
+            </div>
         </div>
         @empty
         <p>Нет слайдов. Добавьте изображения — они будут отображаться на главной от края до края без подписей.</p>

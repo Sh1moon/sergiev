@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
 use App\Models\ReferenceSection;
+use App\Models\DistrictPoliceEntry;
 use App\Models\ManagementCompanyRow;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -12,10 +13,13 @@ class ReferenceController extends Controller
 {
     public function index()
     {
+        $districtPoliceEntries = DistrictPoliceEntry::orderBy('sort_order')->orderBy('id')->get();
         $districtPoliceSection = ReferenceSection::where('slug', 'district_police')->first();
         $emergencySection = ReferenceSection::where('slug', 'emergency_phones')->first();
-        $districtPoliceContent = $districtPoliceSection?->content ?? (File::exists(resource_path('data/district_police.txt'))
-            ? File::get(resource_path('data/district_police.txt')) : '');
+        $districtPoliceContent = $districtPoliceEntries->isEmpty()
+            ? ($districtPoliceSection?->content ?? (File::exists(resource_path('data/district_police.txt'))
+                ? File::get(resource_path('data/district_police.txt')) : ''))
+            : null;
         $emergencyContent = $emergencySection?->content ?? (File::exists(resource_path('data/emergency_phones.txt'))
             ? File::get(resource_path('data/emergency_phones.txt')) : '');
 
@@ -52,6 +56,7 @@ class ReferenceController extends Controller
         $vacancies = Vacancy::published()->orderByDesc('published_at')->get();
 
         return view('reference.index', [
+            'districtPoliceEntries' => $districtPoliceEntries,
             'districtPoliceContent' => $districtPoliceContent,
             'emergencyContent' => $emergencyContent,
             'managementTables' => $managementTables,
@@ -145,6 +150,10 @@ class ReferenceController extends Controller
             'Единый контактный центр',
             'Эксплуатирующая организация Сергиево-Посадского городского округа ООО «НОРЭНЕРГО»',
             'Территориальный отдел № 4 Госадмтехнадзора Московской области',
+            'Территориальная избирательная комиссия',
+            'Начальник отдела',
+            'Директор филиала',
+            'Начальник СПРЭС',
         ];
         $lines = explode("\n", $safe);
         foreach ($lines as $i => $line) {
@@ -152,8 +161,8 @@ class ReferenceController extends Controller
             if ($trimmed === '') {
                 continue;
             }
-            if (Str::contains($line, ' — ')) {
-                $parts = explode(' — ', $line, 2);
+            if (preg_match('/\s+[—\-]\s+/u', $line)) {
+                $parts = preg_split('/\s+[—\-]\s+/u', $line, 2);
                 $name = trim($parts[0]);
                 $rest = trim($parts[1] ?? '');
                 $lines[$i] = '<span class="ref-emergency-name">' . $name . '</span> — ' . $rest;

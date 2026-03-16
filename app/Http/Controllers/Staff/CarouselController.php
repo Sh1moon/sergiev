@@ -29,10 +29,34 @@ class CarouselController extends Controller
         return redirect()->route('staff.carousel.index')->with('success', 'Слайд добавлен');
     }
 
-    public function destroy(CarouselSlide $carousel)
+    public function edit(CarouselSlide $slide)
     {
-        Storage::disk('public')->delete($carousel->image);
-        $carousel->delete();
+        return view('staff.carousel.edit', compact('slide'));
+    }
+
+    public function update(Request $request, CarouselSlide $slide)
+    {
+        $request->validate([
+            'image' => 'nullable|image|max:5120',
+            'sort_order' => 'nullable|integer|min:0',
+        ]);
+        if ($request->hasFile('image')) {
+            if ($slide->image && Storage::disk('public')->exists($slide->image)) {
+                Storage::disk('public')->delete($slide->image);
+            }
+            $slide->image = $request->file('image')->store('carousel', 'public');
+        }
+        $slide->sort_order = (int) $request->get('sort_order', 0);
+        $slide->save();
+        return redirect()->route('staff.carousel.index')->with('success', 'Слайд обновлён');
+    }
+
+    public function destroy(CarouselSlide $slide)
+    {
+        if ($slide->image && Storage::disk('public')->exists($slide->image)) {
+            Storage::disk('public')->delete($slide->image);
+        }
+        $slide->delete();
         return redirect()->route('staff.carousel.index')->with('success', 'Слайд удалён');
     }
 }

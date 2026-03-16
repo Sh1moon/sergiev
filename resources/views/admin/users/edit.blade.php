@@ -53,6 +53,30 @@
             @enderror
         </div>
 
+        <div class="form-group">
+            <label for="password" class="form-label">Новый пароль</label>
+            <input type="password"
+                   class="form-control @error('password') is-invalid @enderror"
+                   id="password"
+                   name="password"
+                   autocomplete="new-password"
+                   minlength="8">
+            <span class="form-hint">Оставьте пустым, чтобы не менять пароль. Не менее 8 символов.</span>
+            @error('password')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirmation" class="form-label">Подтверждение пароля</label>
+            <input type="password"
+                   class="form-control"
+                   id="password_confirmation"
+                   name="password_confirmation"
+                   autocomplete="new-password"
+                   minlength="8">
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             <a href="{{ route('admin.users.index') }}" class="btn">Отмена</a>
@@ -61,6 +85,6 @@
 </div>
 
 <style>
-/* Стили такие же как в create.blade.php */
+.form-hint { font-size: 13px; color: #666; margin-top: 4px; display: block; }
 </style>
 @endsection

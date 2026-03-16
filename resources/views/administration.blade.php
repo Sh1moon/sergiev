@@ -10,7 +10,7 @@
     <section class="administration-section" id="glava">
         <h2 class="section-title">Глава округа</h2>
         <div class="head-block">
-            <div class="head-photo-wrap">
+            <div class="head-photo-wrap js-img-lightbox" role="button" tabindex="0" aria-label="Открыть в полном размере">
                 @if($head->photoUrl())
                     <img src="{{ $head->photoUrl() }}" alt="{{ $head->title }}" class="head-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 @endif
@@ -35,7 +35,7 @@
 
         @forelse($deputies as $deputy)
         <article class="deputy-block" id="{{ $deputy->slug ? 'zam-'.$deputy->slug : 'zam-'.$deputy->id }}">
-            <div class="deputy-photo-wrap">
+            <div class="deputy-photo-wrap js-img-lightbox" role="button" tabindex="0" aria-label="Открыть в полном размере">
                 @if($deputy->photoUrl())
                     <img src="{{ $deputy->photoUrl() }}" alt="{{ $deputy->name }}" class="deputy-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 @endif
@@ -124,18 +124,30 @@
 
     <section class="administration-section" id="go-chs">
         <h2 class="section-title">ГО и ЧС</h2>
-        @if($goChs && $goChs->body)
-            {!! $goChs->body !!}
+        @if($goChsArticles->isNotEmpty())
+            <ul class="go-chs-articles-list">
+                @foreach($goChsArticles as $article)
+                <li class="go-chs-articles-item">
+                    <a href="{{ route('go-chs.show', $article->slug) }}" class="go-chs-articles-link">
+                        <time class="go-chs-articles-date" datetime="{{ $article->published_at?->toIso8601String() }}">{{ $article->published_at?->format('d.m.Y') }}</time>
+                        <span class="go-chs-articles-title">{{ $article->title }}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+            <a href="{{ route('go-chs') }}" class="go-chs-more">Все материалы по ГО и ЧС</a>
         @else
-        <p>Раздел в разработке.</p>
+            <p>Раздел в разработке. <a href="{{ route('go-chs') }}">Перейти в раздел ГО и ЧС</a>.</p>
         @endif
     </section>
 </div>
 
 <style>
-.head-photo { width: 100%; height: auto; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.head-photo-placeholder { width: 280px; aspect-ratio: 3/4; background: #e8ebe8; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; font-size: 2rem; font-weight: 600; }
-.head-info { flex: 1; min-width: 280px; }
+.head-block { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.head-photo-wrap { flex-shrink: 0; width: 260px; }
+.head-photo { width: 260px; height: auto; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: block; }
+.head-photo-placeholder { width: 260px; aspect-ratio: 3/4; background: #e8ebe8; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #7a9a7a; font-size: 1.5rem; font-weight: 600; }
+.head-info { flex: 1; min-width: 0; }
 .head-caption { font-size: 1.35rem; font-weight: 600; color: #1a3c1a; margin-bottom: 16px; }
 .head-info p { margin-bottom: 1em; color: #333; line-height: 1.7; }
 
@@ -146,11 +158,18 @@
 .deputy-content { flex: 1; min-width: 260px; }
 .deputy-name { font-size: 1.15rem; font-weight: 600; color: #1a3c1a; margin-bottom: 6px; }
 .deputy-position { font-size: 0.95rem; color: #5a7a5a; margin-bottom: 10px; font-style: italic; }
-.deputy-content p { margin-bottom: 0.6em; color: #333; line-height: 1.65; }
+.deputy-content p { margin-bottom: 0.6em; color: #333; line-height: 1.7; }
 .deputy-contacts { margin-top: 10px; font-size: 0.95rem; color: #1a3c1a; font-weight: 500; }
 
 @media (max-width: 600px) {
+    .head-block { flex-direction: column; }
+    .head-photo-wrap { width: 100%; max-width: 260px; }
+    .head-photo { width: 100%; max-width: 260px; }
+    .head-photo-placeholder { width: 100%; max-width: 260px; }
     .deputy-block { flex-direction: column; }
+    .deputy-photo-wrap { width: 100%; max-width: 180px; }
+    .deputy-photo, .deputy-photo-placeholder { width: 100%; max-width: 180px; height: auto; min-height: 220px; }
+    .deputy-content { min-width: 0; }
 }
 
 .dept-group { margin-bottom: 28px; }
@@ -158,7 +177,7 @@
 .dept-head { font-size: 0.95rem; color: #444; margin-bottom: 8px; }
 .dept-schedule { font-size: 0.9rem; color: #666; margin-bottom: 6px; font-style: italic; }
 .dept-list { margin: 0 0 0 1.2em; padding: 0; }
-.dept-list li { margin-bottom: 6px; color: #333; line-height: 1.5; }
+.dept-list li { margin-bottom: 6px; color: #333; line-height: 1.7; }
 
 .institution-card { background: #f8faf8; border-radius: 8px; padding: 18px; margin-bottom: 20px; border-left: 4px solid #1a3c1a; }
 .institution-card h3 { font-size: 1.05rem; color: #1a3c1a; margin-bottom: 12px; }
@@ -172,7 +191,14 @@
 .territories-table tr:nth-child(even) { background: #f8faf8; }
 .territories-table td br { line-height: 1.4; }
 
-#go-chs h3 { font-size: 1.1rem; color: #1a3c1a; margin-top: 20px; margin-bottom: 10px; }
-#go-chs p { margin-bottom: 0.8em; color: #333; line-height: 1.65; }
+.go-chs-articles-list { list-style: none; padding: 0; margin: 0 0 16px 0; }
+.go-chs-articles-item { margin-bottom: 10px; }
+.go-chs-articles-link { display: inline-flex; align-items: baseline; gap: 12px; text-decoration: none; color: #1a3c1a; }
+.go-chs-articles-link:hover { color: #eac31b; }
+.go-chs-articles-date { font-size: 0.9em; color: #666; flex-shrink: 0; }
+.go-chs-articles-title { flex: 1; }
+.go-chs-more { display: inline-block; margin-top: 8px; color: #1a3c1a; font-weight: 500; text-decoration: none; }
+.go-chs-more:hover { color: #eac31b; }
+#go-chs p { margin-bottom: 0.8em; color: #333; line-height: 1.7; }
 </style>
 @endsection

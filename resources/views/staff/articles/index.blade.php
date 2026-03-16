@@ -6,7 +6,7 @@
 <div class="staff-articles">
     <div class="page-header">
         <h1>Статьи</h1>
-        <a href="{{ route('staff.articles.create') }}" class="btn btn-primary">Добавить статью</a>
+        <a href="{{ route('staff.articles.create', isset($filterSectionId) && $filterSectionId ? ['section' => $sections->firstWhere('id', $filterSectionId)?->slug] : []) }}" class="btn btn-primary">Добавить статью</a>
     </div>
 
     <form method="get" class="filter-form">
@@ -14,7 +14,7 @@
         <select name="section_id" id="section_id" onchange="this.form.submit()">
             <option value="">Все разделы</option>
             @foreach($sections as $s)
-            <option value="{{ $s->id }}" {{ request('section_id') == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
+            <option value="{{ $s->id }}" {{ (request('section_id') ?: ($filterSectionId ?? null)) == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
             @endforeach
         </select>
     </form>
@@ -38,6 +38,8 @@
                     <td class="actions">
                         @if($article->section->slug === 'news')
                             <a href="{{ route('news.show', $article->slug) }}" class="btn btn-sm" target="_blank">Просмотр</a>
+                        @elseif($article->section->slug === 'go-chs')
+                            <a href="{{ route('go-chs.show', $article->slug) }}" class="btn btn-sm" target="_blank">Просмотр</a>
                         @else
                             <a href="{{ route('articles.show', [$article->section->slug, $article->slug]) }}" class="btn btn-sm" target="_blank">Просмотр</a>
                         @endif

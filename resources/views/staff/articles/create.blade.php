@@ -13,7 +13,7 @@
             <label class="form-label">Раздел *</label>
             <select name="article_section_id" class="form-control" required>
                 @foreach($sections as $s)
-                <option value="{{ $s->id }}" {{ old('article_section_id') == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
+                <option value="{{ $s->id }}" {{ (old('article_section_id', $defaultSectionId ?? null) == $s->id) ? 'selected' : '' }}>{{ $s->name }}</option>
                 @endforeach
             </select>
             @error('article_section_id')<div class="invalid-feedback">{{ $message }}</div>@enderror

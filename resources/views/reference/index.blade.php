@@ -9,9 +9,43 @@
     <section class="reference-section" id="district-police">
         <h2 class="reference-section-title">Отдел участковых по району</h2>
         <div class="reference-section-body reference-district-police">
-            @foreach(array_filter(explode("\n\n", $districtPoliceContent)) as $paragraph)
-                {!! \App\Http\Controllers\ReferenceController::formatDistrictPoliceParagraph($paragraph) !!}
-            @endforeach
+            @if(isset($districtPoliceEntries) && $districtPoliceEntries->isNotEmpty())
+                @foreach($districtPoliceEntries as $entry)
+                    <div class="ref-entry-block">
+                        @if($entry->admin_district)
+                            <p class="ref-block-title">{{ $entry->admin_district }}</p>
+                        @endif
+                        @if($entry->responsible || $entry->substitute)
+                            <div class="ref-responsible-block">
+                                @if($entry->responsible)
+                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Ответственный:</span> {{ $entry->responsible }}</p>
+                                @endif
+                                @if($entry->substitute)
+                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Замещает ответственного:</span> {{ $entry->substitute }}</p>
+                                @endif
+                            </div>
+                        @endif
+                        @if($entry->residential_sector)
+                            <p class="ref-block-text"><strong class="ref-sector-label">Жилой сектор</strong> – {!! nl2br(e($entry->residential_sector)) !!}</p>
+                        @endif
+                        @if($entry->reception_days)
+                            <p class="ref-block-text"><strong class="ref-sector-label">Дни приема граждан:</strong> {!! nl2br(e($entry->reception_days)) !!}</p>
+                        @endif
+                        @if($entry->leadership_reception_days)
+                            <p class="ref-block-text"><strong class="ref-sector-label">Дни приема ответственного от руководства:</strong> {!! nl2br(e($entry->leadership_reception_days)) !!}</p>
+                        @endif
+                        @if($entry->reception_place)
+                            <p class="ref-block-text"><strong class="ref-sector-label">Место приема граждан:</strong> {!! nl2br(e($entry->reception_place)) !!}</p>
+                        @endif
+                    </div>
+                @endforeach
+            @elseif(!empty($districtPoliceContent))
+                @foreach(array_filter(explode("\n\n", $districtPoliceContent)) as $paragraph)
+                    {!! \App\Http\Controllers\ReferenceController::formatDistrictPoliceParagraph($paragraph) !!}
+                @endforeach
+            @else
+                <p class="reference-placeholder">Раздел в разработке. Содержимое будет добавлено позже.</p>
+            @endif
         </div>
     </section>
 
@@ -121,26 +155,28 @@
 .reference-page-title { color: #1a3c1a; font-size: 1.75rem; margin-bottom: 32px; border-bottom: 2px solid #1a3c1a; padding-bottom: 12px; }
 .reference-section { margin-bottom: 48px; scroll-margin-top: 100px; }
 .reference-section-title { color: #1a3c1a; font-size: 1.35rem; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #d0e0d0; }
-.reference-section-body { font-size: 0.95rem; line-height: 1.7; color: #333; }
+.reference-section-body { font-size: 1.2rem; line-height: 1.7; color: #333; }
 .reference-placeholder { color: #666; font-style: italic; }
 
 .reference-district-police { }
 .reference-district-police .ref-block-text { margin-bottom: 14px; }
 .reference-district-police .ref-block-text:last-child { margin-bottom: 0; }
-.reference-district-police .ref-block-title { font-weight: 700; color: #1a3c1a; margin: 22px 0 10px 0; font-size: 1.02rem; line-height: 1.6; padding-left: 0; }
+.reference-district-police .ref-block-title { font-weight: 700; color: #1a3c1a; margin: 22px 0 10px 0; font-size: 1.2rem; line-height: 1.7; padding-left: 0; }
 .reference-district-police .ref-block-title:first-of-type { margin-top: 0; }
-.reference-district-police .ref-department-title { font-weight: 700; color: #0f2d0f; margin: 28px 0 12px 0; font-size: 1.1rem; line-height: 1.5; border-bottom: 1px solid #c5e0c5; padding-bottom: 6px; }
+.reference-district-police .ref-department-title { font-weight: 700; color: #0f2d0f; margin: 28px 0 12px 0; font-size: 1.2rem; line-height: 1.7; border-bottom: 1px solid #c5e0c5; padding-bottom: 6px; }
 .reference-district-police .ref-department-title:first-of-type { margin-top: 0; }
 
 .reference-district-police .ref-responsible-block { background: #f4f9f4; border-left: 4px solid #1a3c1a; padding: 12px 16px; margin: 12px 0 16px 0; border-radius: 0 6px 6px 0; }
-.reference-district-police .ref-responsible-line { margin: 0 0 8px 0; line-height: 1.5; }
+.reference-district-police .ref-responsible-line { margin: 0 0 8px 0; line-height: 1.7; }
 .reference-district-police .ref-responsible-line:last-child { margin-bottom: 0; }
 .reference-district-police .ref-responsible-label { font-weight: 700; color: #1a3c1a; }
 .reference-district-police .ref-sector-label { font-weight: 700; color: #1a3c1a; }
+.reference-district-police .ref-entry-block { margin-bottom: 28px; }
+.reference-district-police .ref-entry-block:last-child { margin-bottom: 0; }
 
 .reference-emergency .ref-emergency-name { font-weight: 700; color: #1a3c1a; }
 .reference-emergency .ref-emergency-heading { font-weight: 600; color: #1a3c1a; margin-bottom: 8px; }
-.reference-emergency .ref-emergency-block { margin-bottom: 14px; line-height: 1.6; }
+.reference-emergency .ref-emergency-block { margin-bottom: 14px; line-height: 1.7; }
 .reference-emergency .ref-emergency-block:last-child { margin-bottom: 0; }
 .reference-emergency a { color: #1a5c1a; text-decoration: underline; }
 .reference-emergency a:hover { color: #eac31b; }
@@ -152,7 +188,7 @@
 .reference-section .honorary-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 1.2rem;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border-radius: 8px;
@@ -165,14 +201,5 @@
 .reference-section .honorary-table td:first-child { font-weight: 500; color: #1a3c1a; width: 50px; vertical-align: top; }
 .reference-section .honorary-table td a { color: #1a5c1a; text-decoration: underline; }
 .reference-section .honorary-table td a:hover { color: #eac31b; }
-
-.ref-vacancies-intro { margin-bottom: 24px; }
-.ref-vacancies-intro p { margin-bottom: 12px; line-height: 1.65; }
-.ref-vacancies-list-title { color: #1a3c1a; font-size: 1.1rem; margin: 20px 0 12px 0; }
-.ref-vacancies-list { list-style: none; padding: 0; margin: 0; }
-.ref-vacancies-list li { margin-bottom: 10px; }
-.ref-vacancies-link { display: inline-flex; align-items: baseline; gap: 12px; text-decoration: none; color: #1a3c1a; }
-.ref-vacancies-link:hover { color: #eac31b; }
-.ref-vacancies-date { font-size: 0.9em; color: #666; flex-shrink: 0; }
 </style>
 @endsection

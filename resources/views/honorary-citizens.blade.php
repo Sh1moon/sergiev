@@ -46,7 +46,7 @@
 .honorary-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 1.2rem;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border-radius: 8px;

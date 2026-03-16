@@ -17,8 +17,8 @@
         <a href="{{ route('staff.content.departments') }}" class="content-link-card">Подразделения</a>
         <a href="{{ route('staff.content.institutions') }}" class="content-link-card">Муниципальные учреждения</a>
         <a href="{{ route('staff.content.territories') }}" class="content-link-card">Территории</a>
-        <a href="{{ route('staff.content.go-chs.edit') }}" class="content-link-card">ГО и ЧС</a>
-        <a href="{{ route('staff.content.reference.edit', 'district_police') }}" class="content-link-card">Отдел участковых по району</a>
+        <a href="{{ route('staff.articles.index', ['section' => 'go-chs']) }}" class="content-link-card">ГО и ЧС</a>
+        <a href="{{ route('staff.content.district-police.index') }}" class="content-link-card">Отдел участковых по району</a>
         <a href="{{ route('staff.content.reference.edit', 'emergency_phones') }}" class="content-link-card">Телефоны экстренных служб</a>
         <a href="{{ route('staff.content.management') }}" class="content-link-card">Управляющие компании</a>
     </div>

@@ -22,7 +22,7 @@
 <style>
 .appeals-ank-page { padding: 20px 0; max-width: 800px; }
 .appeals-ank-page .page-title { color: #1a3c1a; margin-bottom: 24px; border-bottom: 2px solid #1a3c1a; padding-bottom: 12px; font-size: 1.25rem; line-height: 1.4; }
-.appeals-ank-content { color: #333; line-height: 1.7; }
+.appeals-ank-content { color: #333; font-size: 1.2rem; line-height: 1.7; }
 .appeals-ank-content p { margin-bottom: 1em; }
 .appeals-ank-content a { color: #1a3c1a; text-decoration: underline; }
 .appeals-ank-content a:hover { color: #2a5a2a; }

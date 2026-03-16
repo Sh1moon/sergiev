@@ -183,11 +183,11 @@
 <style>
 .appeals-schedule-page { padding: 20px 0; }
 .appeals-schedule-page .page-title { color: #1a3c1a; margin-bottom: 24px; border-bottom: 2px solid #1a3c1a; padding-bottom: 12px; }
-.schedule-content { color: #1a3c1a; line-height: 1.6; }
+.schedule-content { color: #1a3c1a; font-size: 1.2rem; line-height: 1.7; }
 .schedule-content p { margin-bottom: 1em; }
 .schedule-content h2 { color: #1a3c1a; margin: 28px 0 12px 0; font-size: 1.2rem; }
 .schedule-table-wrap { overflow-x: auto; margin: 16px 0; }
-.schedule-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.schedule-table { width: 100%; border-collapse: collapse; font-size: 1.2rem; }
 .schedule-table th, .schedule-table td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; vertical-align: top; }
 .schedule-table th { background: #1a3c1a; color: #fafffa; font-weight: 600; }
 .schedule-table tr:nth-child(even) { background: #f9f9f9; }
@@ -200,6 +200,6 @@
 .schedule-list li { margin-bottom: 1em; padding-left: 0; }
 .schedule-content a { color: #1a3c1a; text-decoration: underline; }
 .schedule-content a:hover { color: #eac31b; }
-@media (max-width: 768px) { .schedule-table { font-size: 13px; } .schedule-table th, .schedule-table td { padding: 8px; } }
+@media (max-width: 768px) { .schedule-table { font-size: 1.1rem; } .schedule-table th, .schedule-table td { padding: 8px; } }
 </style>
 @endsection

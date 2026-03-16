@@ -8,10 +8,12 @@ use App\Models\CouncilDeputy;
 use App\Models\AdministrationDepartment;
 use App\Models\AdministrationInstitution;
 use App\Models\AdministrationTerritory;
-use App\Models\AdministrationGoChs;
 use App\Models\ReferenceSection;
+use App\Models\DistrictPoliceEntry;
 use App\Models\ManagementCompanyRow;
+use App\Services\DistrictPoliceTextParser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -281,24 +283,114 @@ class ContentController extends Controller
         return redirect()->route('staff.content.territories')->with('success', 'Запись удалена');
     }
 
-    // GO and CHS (single record)
-    public function goChsEdit()
+    // District police entries (structured editor)
+    public function districtPoliceIndex()
     {
-        $item = AdministrationGoChs::firstOrCreate([], ['body' => '']);
-        return view('staff.content.go-chs-edit', compact('item'));
+        $entries = DistrictPoliceEntry::orderBy('sort_order')->orderBy('id')->get();
+        return view('staff.content.district-police-index', compact('entries'));
     }
 
-    public function goChsUpdate(Request $request)
+    public function districtPoliceEdit(?DistrictPoliceEntry $entry = null)
     {
-        $item = AdministrationGoChs::firstOrCreate([], ['body' => '']);
-        $item->update(['body' => $request->get('body', '')]);
-        return redirect()->route('staff.content.index')->with('success', 'Раздел ГО и ЧС обновлён');
+        $entry = $entry ?? new DistrictPoliceEntry();
+        return view('staff.content.district-police-edit', compact('entry'));
     }
 
-    // Reference sections (district police, emergency)
+    public function districtPoliceStore(Request $request)
+    {
+        $request->validate([
+            'admin_district' => 'nullable|string|max:500',
+            'responsible' => 'nullable|string',
+            'substitute' => 'nullable|string',
+            'residential_sector' => 'nullable|string',
+            'reception_days' => 'nullable|string',
+            'leadership_reception_days' => 'nullable|string',
+            'reception_place' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
+        ]);
+        $data = $request->only([
+            'admin_district', 'responsible', 'substitute', 'residential_sector',
+            'reception_days', 'leadership_reception_days', 'reception_place', 'sort_order',
+        ]);
+        $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
+        DistrictPoliceEntry::create($data);
+        return redirect()->route('staff.content.district-police.index')->with('success', 'Запись добавлена');
+    }
+
+    public function districtPoliceUpdate(Request $request, DistrictPoliceEntry $entry)
+    {
+        $request->validate([
+            'admin_district' => 'nullable|string|max:500',
+            'responsible' => 'nullable|string',
+            'substitute' => 'nullable|string',
+            'residential_sector' => 'nullable|string',
+            'reception_days' => 'nullable|string',
+            'leadership_reception_days' => 'nullable|string',
+            'reception_place' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
+        ]);
+        $data = $request->only([
+            'admin_district', 'responsible', 'substitute', 'residential_sector',
+            'reception_days', 'leadership_reception_days', 'reception_place', 'sort_order',
+        ]);
+        $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
+        $entry->update($data);
+        return redirect()->route('staff.content.district-police.index')->with('success', 'Запись обновлена');
+    }
+
+    public function districtPoliceDestroy(DistrictPoliceEntry $entry)
+    {
+        $entry->delete();
+        return redirect()->route('staff.content.district-police.index')->with('success', 'Запись удалена');
+    }
+
+    /** Импорт участковых из файла. Сначала используется resources/data/district_police.txt (основной файл), затем database/seeders/data/district_police_raw.txt. */
+    public function districtPoliceImport()
+    {
+        $path = resource_path('data/district_police.txt');
+        if (!is_file($path)) {
+            $path = database_path('seeders/data/district_police_raw.txt');
+        }
+        if (!is_file($path)) {
+            return redirect()->route('staff.content.district-police.index')->with('error', 'Файл с текстом участковых не найден.');
+        }
+
+        $text = file_get_contents($path);
+        $entries = DistrictPoliceTextParser::parse($text);
+        if (empty($entries)) {
+            return redirect()->route('staff.content.district-police.index')->with('error', 'Не удалось разобрать записи из файла. Проверьте формат текста.');
+        }
+
+        DistrictPoliceEntry::truncate();
+        foreach ($entries as $index => $data) {
+            DistrictPoliceEntry::create([
+                'sort_order' => $index + 1,
+                'admin_district' => $data['admin_district'] ?? null,
+                'responsible' => $data['responsible'] ?? null,
+                'substitute' => $data['substitute'] ?? null,
+                'residential_sector' => $data['residential_sector'] ?? null,
+                'reception_days' => $data['reception_days'] ?? null,
+                'leadership_reception_days' => $data['leadership_reception_days'] ?? null,
+                'reception_place' => $data['reception_place'] ?? null,
+            ]);
+        }
+
+        return redirect()->route('staff.content.district-police.index')->with('success', 'Импортировано записей: ' . count($entries) . '. Текст из файла добавлен в редактор.');
+    }
+
+    // Reference sections (emergency only; district_police uses districtPoliceIndex)
     public function referenceEdit(string $slug)
     {
+        if ($slug === 'district_police') {
+            return redirect()->route('staff.content.district-police.index');
+        }
         $section = ReferenceSection::firstOrCreate(['slug' => $slug], ['content' => '']);
+        if ($slug === 'emergency_phones' && trim($section->content ?? '') === '') {
+            $path = resource_path('data/emergency_phones.txt');
+            if (File::exists($path)) {
+                $section->content = File::get($path);
+            }
+        }
         $titles = [
             'district_police' => 'Отдел участковых по району',
             'emergency_phones' => 'Телефоны экстренных служб',

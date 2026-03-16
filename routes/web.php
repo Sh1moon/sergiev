@@ -23,6 +23,7 @@ use App\Http\Controllers\Staff\ContentController as StaffContentController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\HonoraryCitizensController;
 use App\Http\Controllers\CouncilDeputiesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,8 @@ Route::get('/honorary-citizens', [HonoraryCitizensController::class, 'index'])->
 Route::get('/sights', PlaceholderController::class)->name('sights');
 Route::get('/gardeners', [GardenersController::class, 'index'])->name('gardeners');
 Route::get('/gardeners/{article:slug}', [ArticleController::class, 'show'])->name('gardeners.show')->defaults('sectionSlug', 'gardeners');
+Route::get('/go-chs', [ArticleController::class, 'index'])->name('go-chs')->defaults('sectionSlug', 'go-chs');
+Route::get('/go-chs/{article:slug}', [ArticleController::class, 'show'])->name('go-chs.show')->defaults('sectionSlug', 'go-chs');
 Route::get('/work-results', PlaceholderController::class)->name('work-results');
 Route::get('/administration', [AdministrationController::class, 'index'])->name('administration');
 Route::get('/administration/head', function () {
@@ -129,6 +132,10 @@ Route::get('/ecology/construction-waste', function () {
 })->name('ecology.construction-waste');
 Route::get('/appeals', [AppealController::class, 'index'])->name('appeals')->middleware('auth');
 Route::post('/appeals', [AppealController::class, 'store'])->name('appeals.store')->middleware('auth');
+Route::get('/appeals/attachment/{appeal}', [AppealController::class, 'attachment'])->name('appeals.attachment')->middleware('auth');
+Route::get('/appeals/{appeal}/edit', [AppealController::class, 'edit'])->name('appeals.edit')->middleware('auth');
+Route::put('/appeals/{appeal}', [AppealController::class, 'update'])->name('appeals.update')->middleware('auth');
+Route::get('/appeals/{appeal}', [AppealController::class, 'show'])->name('appeals.show')->middleware('auth');
 Route::get('/appeals/work', function () {
     return view('appeals.work');
 })->name('appeals.work');
@@ -170,7 +177,9 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::delete('/articles/{article}/files/{file}', [StaffArticleController::class, 'destroyFile'])->name('articles.files.destroy');
     Route::get('/carousel', [CarouselController::class, 'index'])->name('carousel.index');
     Route::post('/carousel', [CarouselController::class, 'store'])->name('carousel.store');
-    Route::delete('/carousel/{carousel}', [CarouselController::class, 'destroy'])->name('carousel.destroy');
+    Route::get('/carousel/{slide}/edit', [CarouselController::class, 'edit'])->name('carousel.edit');
+    Route::put('/carousel/{slide}', [CarouselController::class, 'update'])->name('carousel.update');
+    Route::delete('/carousel/{slide}', [CarouselController::class, 'destroy'])->name('carousel.destroy');
     Route::get('/appeals', [StaffAppealController::class, 'index'])->name('appeals.index');
     Route::get('/appeals/{appeal}', [StaffAppealController::class, 'show'])->name('appeals.show');
     Route::post('/appeals/{appeal}/respond', [StaffAppealController::class, 'respond'])->name('appeals.respond');
@@ -223,8 +232,13 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::put('/content/territories/{territory}', [StaffContentController::class, 'territoriesUpdate'])->name('content.territories.update');
     Route::delete('/content/territories/{territory}', [StaffContentController::class, 'territoriesDestroy'])->name('content.territories.destroy');
 
-    Route::get('/content/go-chs', [StaffContentController::class, 'goChsEdit'])->name('content.go-chs.edit');
-    Route::put('/content/go-chs', [StaffContentController::class, 'goChsUpdate'])->name('content.go-chs.update');
+    Route::get('/content/district-police', [StaffContentController::class, 'districtPoliceIndex'])->name('content.district-police.index');
+    Route::post('/content/district-police/import', [StaffContentController::class, 'districtPoliceImport'])->name('content.district-police.import');
+    Route::get('/content/district-police/create', [StaffContentController::class, 'districtPoliceEdit'])->name('content.district-police.create');
+    Route::post('/content/district-police', [StaffContentController::class, 'districtPoliceStore'])->name('content.district-police.store');
+    Route::get('/content/district-police/{entry}/edit', [StaffContentController::class, 'districtPoliceEdit'])->name('content.district-police.edit');
+    Route::put('/content/district-police/{entry}', [StaffContentController::class, 'districtPoliceUpdate'])->name('content.district-police.update');
+    Route::delete('/content/district-police/{entry}', [StaffContentController::class, 'districtPoliceDestroy'])->name('content.district-police.destroy');
 
     Route::get('/content/reference/{slug}', [StaffContentController::class, 'referenceEdit'])->name('content.reference.edit')->where('slug', 'district_police|emergency_phones');
     Route::put('/content/reference/{slug}', [StaffContentController::class, 'referenceUpdate'])->name('content.reference.update')->where('slug', 'district_police|emergency_phones');
@@ -245,7 +259,6 @@ Route::middleware(['auth', 'role:employee'])->prefix('employee')->name('employee
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', function () {
-        return view('profile');
-    })->name('profile');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });

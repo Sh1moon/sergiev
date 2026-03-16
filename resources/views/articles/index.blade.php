@@ -18,6 +18,7 @@
                 @php
     $articleUrl = match($section->slug) {
         'news' => route('news.show', $article->slug),
+        'go-chs' => route('go-chs.show', $article->slug),
         'gosadmtechnadzor' => route('gosadmtechnadzor.show', $article->slug),
         'information' => route('information.show', $article->slug),
         'finance' => route('finance.show', $article->slug),
@@ -28,7 +29,9 @@
                 <a href="{{ $articleUrl }}" class="article-card-link">
                     <div class="article-card-image">
                         @if($article->image)
-                            <img src="{{ Storage::url($article->image) }}" alt="">
+                            <span class="js-img-lightbox" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                                <img src="{{ Storage::url($article->image) }}" alt="">
+                            </span>
                         @else
                             <span class="article-card-placeholder"><img src="{{ asset('images/logo.svg') }}" alt="" class="article-card-placeholder-logo"></span>
                         @endif
@@ -83,14 +86,14 @@
 .article-card-image img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
 .article-card-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: #1a3c1a; padding: 24px; box-sizing: border-box; }
 .article-card-placeholder-logo { max-width: 70%; max-height: 70%; width: auto; height: auto; object-fit: contain; opacity: 0.7; }
-.article-card-body { flex: 1; min-width: 200px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+.article-card-body { flex: 1; min-width: 0; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
 .article-card-title { color: #1a3c1a; margin-bottom: 8px; font-size: 1.25rem; transition: color 0.2s; }
 .article-card-date { font-size: 0.9em; color: #666; margin-bottom: 10px; }
 .article-card-excerpt { color: #555; line-height: 1.5; margin-bottom: 12px; }
 .article-card-more { color: #eac31b; font-weight: 500; }
 @media (max-width: 640px) {
     .article-card-link { flex-direction: column; min-height: auto; }
-    .article-card-image { flex: 0 0 auto; width: 100%; height: 200px; }
+    .article-card-image { flex: 0 0 auto; width: 100%; max-width: 100%; height: 200px; }
 }
 .articles-pagination { margin-top: 30px; }
 .articles-pagination nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }

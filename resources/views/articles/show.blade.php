@@ -8,6 +8,7 @@
         @php
     $sectionIndexRoute = match($section->slug) {
         'news' => route('news.index'),
+        'go-chs' => route('go-chs'),
         'gosadmtechnadzor' => route('gosadmtechnadzor'),
         'information' => route('information'),
         'gardeners' => route('gardeners'),
@@ -28,8 +29,10 @@
 
     <div class="article-detail-image">
         @if(!empty($article->image))
-            <img src="{{ Storage::url($article->image) }}" alt="" class="article-detail-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="article-detail-placeholder" style="display: none;"><img src="{{ asset('images/logo.svg') }}" alt="" class="article-detail-placeholder-logo"></div>
+            <span class="js-img-lightbox article-detail-main-img-wrap" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                <img src="{{ Storage::url($article->image) }}" alt="" class="article-detail-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="article-detail-placeholder" style="display: none;"><img src="{{ asset('images/logo.svg') }}" alt="" class="article-detail-placeholder-logo"></div>
+            </span>
         @else
             <div class="article-detail-placeholder"><img src="{{ asset('images/logo.svg') }}" alt="" class="article-detail-placeholder-logo"></div>
         @endif
@@ -65,10 +68,11 @@
 .article-detail-title { color: #1a3c1a; margin-bottom: 12px; font-size: 1.75rem; }
 .article-detail-meta { color: #666; font-size: 0.9em; }
 .article-detail-image { margin-bottom: 24px; border-radius: 8px; overflow: hidden; min-height: 120px; max-height: min(70vh, 520px); background: #1a3c1a; display: flex; align-items: center; justify-content: center; }
+.article-detail-main-img-wrap { cursor: pointer; display: block; }
 .article-detail-image .article-detail-main-img { max-width: 100%; max-height: min(70vh, 500px); width: auto; height: auto; object-fit: contain; display: block; }
 .article-detail-placeholder { display: flex; align-items: center; justify-content: center; padding: 48px 24px; min-height: 200px; width: 100%; box-sizing: border-box; }
 .article-detail-placeholder-logo { max-width: 280px; width: 60%; height: auto; object-fit: contain;  opacity: 0.9; }
-.article-detail-body { line-height: 1.7; color: #1a3c1a; margin-bottom: 32px; }
+.article-detail-body { font-size: 1.2rem; line-height: 1.7; color: #1a3c1a; margin-bottom: 32px; }
 .article-detail-body p { margin-bottom: 1em; }
 .article-detail-files { margin-bottom: 24px; padding: 16px; background: #f5f5f5; border-radius: 8px; }
 .article-detail-files h3 { color: #1a3c1a; margin-bottom: 12px; font-size: 1.1rem; }

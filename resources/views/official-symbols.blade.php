@@ -11,21 +11,21 @@
 
         <div class="symbols-grid">
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-color.jpg') }}" alt="Герб многоцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>Герб<br>(многоцветный)</span></div>
                 </div>
                 <figcaption>Герб Сергиево-Посадского городского округа (многоцветный)</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-mono.jpg') }}" alt="Герб одноцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>Герб<br>(одноцветный)</span></div>
                 </div>
                 <figcaption>Герб Сергиево-Посадского городского округа (одноцветный)</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-hatch.jpg') }}" alt="Герб с штриховкой" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>Герб<br>(с штриховкой)</span></div>
                 </div>
@@ -33,21 +33,21 @@
             </figure>
 
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-color.jpg') }}" alt="Герб с вольной частью многоцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью<br>(многоцветный)</span></div>
                 </div>
                 <figcaption>Герб с вольной частью (многоцветный)</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-mono.jpg') }}" alt="Герб с вольной частью одноцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью<br>(одноцветный)</span></div>
                 </div>
                 <figcaption>Герб с вольной частью (одноцветный)</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-hatch.jpg') }}" alt="Герб с вольной частью с штриховкой" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью<br>(с штриховкой)</span></div>
                 </div>
@@ -55,21 +55,21 @@
             </figure>
 
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-crown-color.jpg') }}" alt="Герб с короной многоцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С короной<br>(многоцветный)</span></div>
                 </div>
                 <figcaption>Герб (многоцветный) с короной, соответствующей статусу Сергиево-Посадского городского округа</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-crown-mono.jpg') }}" alt="Герб с короной одноцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С короной<br>(одноцветный)</span></div>
                 </div>
                 <figcaption>Герб (одноцветный) с короной, соответствующей статусу Сергиево-Посадского городского округа</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-crown-hatch.jpg') }}" alt="Герб с короной с штриховкой" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С короной<br>(с штриховкой)</span></div>
                 </div>
@@ -77,21 +77,21 @@
             </figure>
 
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-crown-color.jpg') }}" alt="Герб с вольной частью и короной многоцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью и короной<br>(многоцветный)</span></div>
                 </div>
                 <figcaption>Герб (многоцветный) с вольной частью и с короной, соответствующей статусу Сергиево-Посадского городского округа</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-crown-mono.jpg') }}" alt="Герб с вольной частью и короной одноцветный" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью и короной<br>(одноцветный)</span></div>
                 </div>
                 <figcaption>Герб (одноцветный) с вольной частью и с короной, соответствующей статусу Сергиево-Посадского городского округа</figcaption>
             </figure>
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/gerb-volnaya-crown-hatch.jpg') }}" alt="Герб с вольной частью и короной с штриховкой" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder"><span>С вольной частью и короной<br>(с штриховкой)</span></div>
                 </div>
@@ -106,7 +106,7 @@
         <h2>Флаг Сергиево-Посадского городского округа Московской области</h2>
         <div class="symbols-grid symbols-grid-flag">
             <figure class="symbols-item">
-                <div class="symbols-img-wrap symbols-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="symbols-img-wrap symbols-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/symbols/flag.jpg') }}" alt="Флаг" onerror="this.style.display='none'; this.nextElementSibling.classList.add('visible');">
                     <div class="symbols-placeholder symbols-placeholder-flag"><span>Флаг</span></div>
                 </div>
@@ -127,55 +127,6 @@
         </div>
     </section>
 </div>
-
-<div class="symbols-lightbox-overlay" id="symbolsLightbox" role="dialog" aria-modal="true" aria-label="Увеличенное изображение" hidden>
-    <button type="button" class="symbols-lightbox-close" aria-label="Закрыть">&times;</button>
-    <img src="" alt="" class="symbols-lightbox-img">
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const lightbox = document.getElementById('symbolsLightbox');
-    const lightboxImg = lightbox?.querySelector('.symbols-lightbox-img');
-    const closeBtn = lightbox?.querySelector('.symbols-lightbox-close');
-    const clickables = document.querySelectorAll('.symbols-img-clickable');
-    function openLightbox(src, alt) {
-        if (!lightboxImg || !lightbox) return;
-        lightboxImg.src = src;
-        lightboxImg.alt = alt || '';
-        lightbox.removeAttribute('hidden');
-        lightbox.classList.add('symbols-lightbox-open');
-        document.body.style.overflow = 'hidden';
-        closeBtn?.focus();
-    }
-    function closeLightbox() {
-        if (!lightbox) return;
-        lightbox.setAttribute('hidden', '');
-        lightbox.classList.remove('symbols-lightbox-open');
-        document.body.style.overflow = '';
-    }
-    clickables.forEach(function(el) {
-        el.addEventListener('click', function() {
-            const img = el.querySelector('img');
-            if (img && img.src && img.style.display !== 'none') openLightbox(img.src, img.alt);
-        });
-        el.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                const img = el.querySelector('img');
-                if (img && img.src && img.style.display !== 'none') openLightbox(img.src, img.alt);
-            }
-        });
-    });
-    closeBtn?.addEventListener('click', closeLightbox);
-    lightbox?.addEventListener('click', function(e) {
-        if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeLightbox();
-    });
-});
-</script>
 
 <style>
 .official-symbols-page { padding: 20px 0; max-width: 960px; }
@@ -241,47 +192,5 @@ document.addEventListener('DOMContentLoaded', function() {
 .symbols-song-text p { margin-bottom: 1.5em; }
 .symbols-song-chorus { font-weight: 600; color: #1a3c1a; }
 
-.symbols-lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-.symbols-lightbox-overlay[hidden] { display: none; }
-.symbols-lightbox-overlay.symbols-lightbox-open {
-    opacity: 1;
-    visibility: visible;
-    display: flex;
-}
-.symbols-lightbox-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    border: none;
-    background: rgba(255,255,255,0.2);
-    color: #fff;
-    font-size: 32px;
-    line-height: 1;
-    cursor: pointer;
-    border-radius: 8px;
-    padding: 0;
-}
-.symbols-lightbox-close:hover { background: rgba(255,255,255,0.3); }
-.symbols-lightbox-img {
-    max-width: 95vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
 </style>
 @endsection

@@ -5,22 +5,32 @@
 @section('content_full')
 @if($carouselSlides->isNotEmpty())
 <div class="home-carousel-bleed">
-<div class="home-carousel" aria-label="Карусель изображений">
-    <div class="carousel-inner">
-        @foreach($carouselSlides as $slide)
-        <div class="carousel-slide">
-            <img src="{{ asset('storage/' . $slide->image) }}" alt="" loading="{{ $loop->first ? 'eager' : 'lazy' }}">
+<div class="home-carousel" aria-label="Карусель изображений" data-slide-count="{{ $carouselSlides->count() }}">
+    <div class="carousel-viewport">
+        <div class="carousel-inner">
+            @foreach($carouselSlides as $slide)
+            <div class="carousel-slide">
+                <div class="js-img-lightbox carousel-slide-click" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                    <img src="{{ asset('storage/' . $slide->image) }}" alt="" loading="{{ $loop->first ? 'eager' : 'lazy' }}">
+                </div>
+            </div>
+            @endforeach
+            @if($carouselSlides->count() > 1)
+            @foreach($carouselSlides as $slide)
+            <div class="carousel-slide carousel-slide-clone" aria-hidden="true">
+                <div class="js-img-lightbox carousel-slide-click" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                    <img src="{{ asset('storage/' . $slide->image) }}" alt="">
+                </div>
+            </div>
+            @endforeach
+            @endif
         </div>
-        @endforeach
     </div>
     @if($carouselSlides->count() > 1)
     <button type="button" class="carousel-btn carousel-btn-prev" aria-label="Предыдущий слайд">&lsaquo;</button>
     <button type="button" class="carousel-btn carousel-btn-next" aria-label="Следующий слайд">&rsaquo;</button>
-    <div class="carousel-dots">
-        @foreach($carouselSlides as $i => $slide)
-        <button type="button" class="carousel-dot {{ $loop->first ? 'active' : '' }}" data-index="{{ $i }}" aria-label="Слайд {{ $i + 1 }}"></button>
-        @endforeach
-    </div>
+    <button type="button" class="carousel-hit carousel-hit-prev" aria-label="Предыдущий слайд"></button>
+    <button type="button" class="carousel-hit carousel-hit-next" aria-label="Следующий слайд"></button>
     @endif
 </div>
 </div>
@@ -40,7 +50,9 @@
                     <a href="{{ route('news.show', $item->slug) }}" class="news-preview-article-card-link">
                         <div class="news-preview-article-card-image">
                             @if($item->image)
-                                <img src="{{ Storage::url($item->image) }}" alt="">
+                                <span class="js-img-lightbox" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                                    <img src="{{ Storage::url($item->image) }}" alt="">
+                                </span>
                             @else
                                 <span class="news-preview-article-card-placeholder"><img src="{{ asset('images/logo.svg') }}" alt="" class="news-preview-article-card-placeholder-logo"></span>
                             @endif
@@ -128,39 +140,80 @@
 (function() {
     const carousel = document.querySelector('.home-carousel');
     if (!carousel) return;
+    const viewport = carousel.querySelector('.carousel-viewport');
     const inner = carousel.querySelector('.carousel-inner');
     const slides = carousel.querySelectorAll('.carousel-slide');
-    const dots = carousel.querySelectorAll('.carousel-dot');
+    const totalSlides = parseInt(carousel.dataset.slideCount, 10);
     const prev = carousel.querySelector('.carousel-btn-prev');
     const next = carousel.querySelector('.carousel-btn-next');
+    const hitPrev = carousel.querySelector('.carousel-hit-prev');
+    const hitNext = carousel.querySelector('.carousel-hit-next');
     let index = 0;
-    function go(n) {
-        index = (n + slides.length) % slides.length;
-        const slide = slides[index];
-        if (slide) {
-            inner.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+    let resetTimer = null;
+    const TRANSITION_MS = 300;
+    function applyTransform(slideIndex, noTransition) {
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+        const slide = slides[slideIndex];
+        if (!slide) return;
+        if (noTransition) inner.style.transition = 'none';
+        var offset = slide.offsetLeft;
+        inner.style.transform = 'translateX(-' + offset + 'px)';
+        if (noTransition) {
+            inner.offsetHeight;
+            inner.style.transition = '';
         }
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
     }
-    function updateIndexFromScroll() {
-        const scrollLeft = inner.scrollLeft;
-        let best = 0;
-        let bestDist = Infinity;
-        slides.forEach((s, i) => {
-            const d = Math.abs(s.offsetLeft - scrollLeft);
-            if (d < bestDist) { bestDist = d; best = i; }
-        });
-        index = best;
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    function go(n) {
+        if (n >= totalSlides) {
+            index = totalSlides;
+            applyTransform(index, false);
+            resetTimer = setTimeout(function() {
+                resetTimer = null;
+                index = 0;
+                applyTransform(0, true);
+            }, Math.round(TRANSITION_MS * 0.65));
+        } else if (n < 0) {
+            index = (n % totalSlides + totalSlides) % totalSlides;
+            applyTransform(index, false);
+        } else {
+            index = n;
+            applyTransform(index, false);
+        }
     }
-    prev?.addEventListener('click', () => go(index - 1));
-    next?.addEventListener('click', () => go(index + 1));
-    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
-    inner.addEventListener('scroll', () => { clearTimeout(inner._scrollT); inner._scrollT = setTimeout(updateIndexFromScroll, 80); });
-    let t = setInterval(() => go(index + 1), 5000);
-    carousel.addEventListener('mouseenter', () => clearInterval(t));
-    carousel.addEventListener('mouseleave', () => { t = setInterval(() => go(index + 1), 5000); });
-    go(0);
+    function refreshPosition() {
+        if (index >= totalSlides) index = 0;
+        applyTransform(index, true);
+    }
+    prev?.addEventListener('click', function() { go(index - 1); });
+    next?.addEventListener('click', function() { go(index + 1); });
+    hitPrev?.addEventListener('click', function() { go(index - 1); });
+    hitNext?.addEventListener('click', function() { go(index + 1); });
+    var touchStartX = 0;
+    var touchEndX = 0;
+    viewport.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    viewport.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        var dx = touchStartX - touchEndX;
+        if (Math.abs(dx) > 50) {
+            if (dx > 0) go(index + 1);
+            else go(index - 1);
+        }
+    }, { passive: true });
+    var t = setInterval(function() { go(index + 1); }, 5000);
+    carousel.addEventListener('mouseenter', function() { clearInterval(t); });
+    carousel.addEventListener('mouseleave', function() { t = setInterval(function() { go(index + 1); }, 5000); });
+    window.addEventListener('resize', function() {
+        clearTimeout(inner._resizeT);
+        inner._resizeT = setTimeout(refreshPosition, 100);
+    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { go(0); }, 50); });
+    } else {
+        go(0);
+        setTimeout(refreshPosition, 300);
+    }
 })();
 </script>
 @endif
@@ -177,44 +230,69 @@
 }
 .home-carousel {
     position: relative;
-    width: 100vw;
+    width: 100%;
+    max-width: 100vw;
     margin-left: calc(50% - 50vw);
-    height: 50vh;
-    min-height: 280px;
-    max-height: 60vh;
+    left: 0;
+    right: 0;
+    height: 56vh;
+    min-height: 320px;
+    max-height: 70vh;
     overflow: hidden;
     background: #1a3c1a;
     box-sizing: border-box;
+}
+.carousel-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+@media (min-width: 768px) {
+    .home-carousel .carousel-viewport {
+        margin-left: 64px;
+        margin-right: 64px;
+        width: calc(100% - 128px);
+    }
 }
 .carousel-inner {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
+    gap: 16px;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 12px 0;
-    -webkit-overflow-scrolling: touch;
+    padding: 16px 0;
+    width: max-content;
+    transition: transform 0.3s ease;
+    will-change: transform;
 }
 .carousel-slide {
     flex: 0 0 auto;
-    width: 18%;
-    min-width: 140px;
-    max-width: 280px;
+    width: 28%;
+    min-width: 180px;
+    max-width: 420px;
     height: 100%;
-    min-height: 200px;
+    min-height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
+    padding: 0 6px;
 }
+@media (max-width: 799px) {
+    .carousel-slide {
+        width: 82vw;
+        min-width: 82vw;
+        max-width: 82vw;
+        min-height: 240px;
+    }
+}
+.carousel-slide-click { cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .carousel-slide img {
     max-height: 100%;
     max-width: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -235,27 +313,32 @@
     transition: background 0.2s;
 }
 .carousel-btn:hover { background: rgba(26,60,26,0.9); }
-.carousel-btn-prev { left: 16px; }
-.carousel-btn-next { right: 16px; }
-.carousel-dots {
+.carousel-btn-prev { left: 12px; }
+.carousel-btn-next { right: 12px; }
+
+.carousel-hit {
+    display: none;
     position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
     z-index: 2;
-    display: flex;
-    gap: 8px;
-}
-.carousel-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255,255,255,0.5);
-    cursor: pointer;
     padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
-.carousel-dot.active { background: #eac31b; }
+.carousel-hit-prev { left: 0; width: 50%; }
+.carousel-hit-next { left: 50%; width: 50%; }
+@media (max-width: 767px) {
+    .carousel-btn { display: none; }
+    .carousel-hit { display: block; }
+    .carousel-hit-prev { width: 22%; }
+    .carousel-hit-next { left: auto; right: 0; width: 22%; }
+}
+@media (max-width: 480px) {
+    .carousel-slide { width: 88vw; min-width: 88vw; max-width: 88vw; min-height: 200px; }
+}
 
 .news-preview { margin-bottom: 40px; }
 .news-preview-title-section { color: #1a3c1a; margin-bottom: 24px; border-bottom: 2px solid #1a3c1a; padding-bottom: 12px; }
@@ -281,14 +364,14 @@
 .news-preview-article-card-image img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
 .news-preview-article-card-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: #1a3c1a; padding: 24px; box-sizing: border-box; }
 .news-preview-article-card-placeholder-logo { max-width: 70%; max-height: 70%; width: auto; height: auto; object-fit: contain; opacity: 0.7; }
-.news-preview-article-card-body { flex: 1; min-width: 200px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+.news-preview-article-card-body { flex: 1; min-width: 0; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
 .news-preview-article-card-title { color: #1a3c1a; margin-bottom: 8px; font-size: 1.25rem; transition: color 0.2s; }
 .news-preview-article-card-date { font-size: 0.9em; color: #666; margin-bottom: 10px; }
-.news-preview-article-card-excerpt { color: #555; line-height: 1.5; margin-bottom: 12px; }
+.news-preview-article-card-excerpt { color: #555; font-size: 1.2rem; line-height: 1.7; margin-bottom: 12px; }
 .news-preview-article-card-more { color: #eac31b; font-weight: 500; }
 @media (max-width: 640px) {
     .news-preview-article-card-link { flex-direction: column; min-height: auto; }
-    .news-preview-article-card-image { flex: 0 0 auto; width: 100%; height: 200px; }
+    .news-preview-article-card-image { flex: 0 0 auto; width: 100%; max-width: 100%; height: 200px; }
 }
 .btn-news { margin-top: 10px; }
 
@@ -372,7 +455,7 @@
 
 .home-appeals { margin-top: 40px; margin-bottom: 40px; }
 .home-appeals h2 { color: #1a3c1a; margin-bottom: 12px; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
-.home-appeals-intro { color: #555; margin-bottom: 16px; line-height: 1.5; }
+.home-appeals-intro { color: #555; margin-bottom: 16px; font-size: 1.2rem; line-height: 1.7; }
 .home-appeals-intro a { color: #1a3c1a; text-decoration: none; }
 .home-appeals-intro a:hover { color: #eac31b; text-decoration: underline; }
 .home-appeals-form-wrap { background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); max-width: 640px; }

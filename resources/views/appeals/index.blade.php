@@ -25,6 +25,12 @@
                     @endif
                 </div>
                 <p class="my-appeals-excerpt">{{ Str::limit($appeal->body, 120) }}</p>
+                <div class="my-appeals-item-actions">
+                    <a href="{{ route('appeals.show', $appeal) }}" class="my-appeals-link">Просмотр</a>
+                    @if(!$appeal->responded_at)
+                        <a href="{{ route('appeals.edit', $appeal) }}" class="my-appeals-link">Редактировать</a>
+                    @endif
+                </div>
                 @if($appeal->response)
                 <div class="my-appeals-response">
                     <strong>Ответ:</strong>
@@ -42,7 +48,7 @@
 <style>
 .appeals-page { padding: 20px 0; max-width: 640px; }
 .appeals-title { color: #1a3c1a; margin-bottom: 12px; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
-.appeals-intro { color: #555; margin-bottom: 24px; line-height: 1.5; }
+.appeals-intro { color: #555; margin-bottom: 24px; font-size: 1.2rem; line-height: 1.7; }
 .appeals-form { background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
 .required { color: #dc3545; }
 .form-hint { font-size: 13px; color: #666; margin-top: 4px; display: block; }
@@ -112,11 +118,14 @@
 .my-appeals-list { list-style: none; padding: 0; margin: 0; }
 .my-appeals-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #1a3c1a; }
 .my-appeals-item-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.my-appeals-item-actions { margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap; }
+.my-appeals-link { color: #1a3c1a; font-weight: 500; }
+.my-appeals-link:hover { color: #eac31b; }
 .my-appeals-date { font-size: 14px; color: #666; }
 .my-appeals-status { font-size: 13px; padding: 2px 8px; border-radius: 4px; }
 .my-appeals-status-waiting { background: #fff3cd; color: #856404; }
 .my-appeals-status-answered { background: #d4edda; color: #155724; }
-.my-appeals-excerpt { color: #555; line-height: 1.5; margin: 0 0 12px 0; }
+.my-appeals-excerpt { color: #555; font-size: 1.2rem; line-height: 1.7; margin: 0 0 12px 0; }
 .my-appeals-response { background: #f5f5f5; padding: 12px; border-radius: 6px; margin-top: 12px; }
 .my-appeals-response strong { color: #1a3c1a; }
 .my-appeals-response p { margin: 8px 0 0 0; color: #333; }

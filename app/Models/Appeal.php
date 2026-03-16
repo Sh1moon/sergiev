@@ -49,4 +49,18 @@ class Appeal extends Model
     {
         return $query->whereNotNull('responded_at');
     }
+
+    public function isImageAttachment(): bool
+    {
+        if (!$this->attachment) {
+            return false;
+        }
+        $ext = strtolower(pathinfo($this->attachment, PATHINFO_EXTENSION));
+        return in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+    }
+
+    public function attachmentOriginalName(): string
+    {
+        return $this->attachment ? basename($this->attachment) : '';
+    }
 }

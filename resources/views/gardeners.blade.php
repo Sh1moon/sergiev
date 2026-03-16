@@ -17,19 +17,19 @@
     <section class="gardeners-images">
         <div class="gardeners-images-grid">
             <figure class="gardeners-image-item">
-                <div class="gardeners-img-wrap gardeners-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="gardeners-img-wrap gardeners-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/gardeners/5-prichin.png') }}" alt="5 причин выбрать электронный способ подачи документов">
                 </div>
                 <figcaption>5 причин выбрать электронный способ подачи документов</figcaption>
             </figure>
             <figure class="gardeners-image-item">
-                <div class="gardeners-img-wrap gardeners-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="gardeners-img-wrap gardeners-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/gardeners/gosklyuch.png') }}" alt="Заявления через Госуслуги и приложение Госключ">
                 </div>
                 <figcaption>Заявления через Госуслуги и приложение «Госключ»</figcaption>
             </figure>
             <figure class="gardeners-image-item">
-                <div class="gardeners-img-wrap gardeners-img-clickable" role="button" tabindex="0" aria-label="Увеличить">
+                <div class="gardeners-img-wrap gardeners-img-clickable js-img-lightbox" role="button" tabindex="0" aria-label="Увеличить">
                     <img src="{{ asset('images/gardeners/lichny-kabinet.png') }}" alt="Заявления через Личный кабинет Росреестра">
                 </div>
                 <figcaption>Заявления через «Личный кабинет» Росреестра</figcaption>
@@ -48,7 +48,9 @@
                     <a href="{{ route('gardeners.show', $article->slug) }}" class="article-card-link">
                         <div class="article-card-image">
                             @if($article->image)
-                                <img src="{{ Storage::url($article->image) }}" alt="">
+                                <span class="js-img-lightbox" role="button" tabindex="0" aria-label="Открыть в полном размере">
+                                    <img src="{{ Storage::url($article->image) }}" alt="">
+                                </span>
                             @else
                                 <span class="article-card-placeholder"><img src="{{ asset('images/logo.svg') }}" alt="" class="article-card-placeholder-logo"></span>
                             @endif
@@ -76,66 +78,17 @@
     </section>
 </div>
 
-<div class="gardeners-lightbox-overlay" id="gardenersLightbox" role="dialog" aria-modal="true" aria-label="Увеличенное изображение" hidden>
-    <button type="button" class="gardeners-lightbox-close" aria-label="Закрыть">&times;</button>
-    <img src="" alt="" class="gardeners-lightbox-img">
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const lightbox = document.getElementById('gardenersLightbox');
-    const lightboxImg = lightbox?.querySelector('.gardeners-lightbox-img');
-    const closeBtn = lightbox?.querySelector('.gardeners-lightbox-close');
-    const clickables = document.querySelectorAll('.gardeners-img-clickable');
-    function openLightbox(src, alt) {
-        if (!lightboxImg || !lightbox) return;
-        lightboxImg.src = src;
-        lightboxImg.alt = alt || '';
-        lightbox.removeAttribute('hidden');
-        lightbox.classList.add('gardeners-lightbox-open');
-        document.body.style.overflow = 'hidden';
-        closeBtn?.focus();
-    }
-    function closeLightbox() {
-        if (!lightbox) return;
-        lightbox.setAttribute('hidden', '');
-        lightbox.classList.remove('gardeners-lightbox-open');
-        document.body.style.overflow = '';
-    }
-    clickables.forEach(function(el) {
-        el.addEventListener('click', function() {
-            const img = el.querySelector('img');
-            if (img && img.src) openLightbox(img.src, img.alt);
-        });
-        el.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                const img = el.querySelector('img');
-                if (img && img.src) openLightbox(img.src, img.alt);
-            }
-        });
-    });
-    closeBtn?.addEventListener('click', closeLightbox);
-    lightbox?.addEventListener('click', function(e) {
-        if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeLightbox();
-    });
-});
-</script>
-
 <style>
 .gardeners-page { padding: 20px 0; }
 .gardeners-page .page-title { color: #1a3c1a; margin-bottom: 24px; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
-.gardeners-intro { margin-bottom: 32px; line-height: 1.7; color: #333; }
+.gardeners-intro { margin-bottom: 32px; font-size: 1.2rem; line-height: 1.7; color: #333; }
 .gardeners-intro p { margin-bottom: 1em; }
 .gardeners-images { margin-bottom: 40px; }
 .gardeners-images-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
 .gardeners-image-item { margin: 0; }
 .gardeners-img-wrap { cursor: pointer; overflow: hidden; border-radius: 8px; }
 .gardeners-image-item img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); display: block; }
-.gardeners-image-item figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.4; }
+.gardeners-image-item figcaption { font-size: 1.2rem; color: #666; margin-top: 8px; line-height: 1.7; }
 .gardeners-news h2 { color: #1a3c1a; margin-bottom: 20px; font-size: 1.25rem; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
 .gardeners-news .articles-list { list-style: none; padding: 0; margin: 0; }
 .gardeners-news .article-card { margin-bottom: 24px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; }
@@ -145,14 +98,14 @@ document.addEventListener('DOMContentLoaded', function() {
 .gardeners-news .article-card-image img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
 .gardeners-news .article-card-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: #1a3c1a; padding: 24px; box-sizing: border-box; }
 .gardeners-news .article-card-placeholder-logo { max-width: 70%; max-height: 70%; width: auto; height: auto; object-fit: contain; opacity: 0.7; }
-.gardeners-news .article-card-body { flex: 1; min-width: 200px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+.gardeners-news .article-card-body { flex: 1; min-width: 0; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
 .gardeners-news .article-card-title { color: #1a3c1a; margin-bottom: 8px; font-size: 1.25rem; }
 .gardeners-news .article-card-date { font-size: 0.9em; color: #666; margin-bottom: 10px; }
-.gardeners-news .article-card-excerpt { color: #555; line-height: 1.5; margin-bottom: 12px; }
+.gardeners-news .article-card-excerpt { color: #555; font-size: 1.2rem; line-height: 1.7; margin-bottom: 12px; }
 .gardeners-news .article-card-more { color: #eac31b; font-weight: 500; }
 @media (max-width: 640px) {
     .gardeners-news .article-card-link { flex-direction: column; min-height: auto; }
-    .gardeners-news .article-card-image { flex: 0 0 auto; width: 100%; height: 200px; }
+    .gardeners-news .article-card-image { flex: 0 0 auto; width: 100%; max-width: 100%; height: 200px; }
 }
 .gardeners-news .articles-pagination { margin-top: 30px; }
 .gardeners-news .articles-pagination nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
@@ -161,47 +114,5 @@ document.addEventListener('DOMContentLoaded', function() {
 .gardeners-news .articles-pagination a:hover { background: #2a5a2a; color: #eac31b; }
 .gardeners-news .articles-pagination span { background: #eac31b; color: #1a3c1a; }
 
-.gardeners-lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-.gardeners-lightbox-overlay[hidden] { display: none; }
-.gardeners-lightbox-overlay.gardeners-lightbox-open {
-    opacity: 1;
-    visibility: visible;
-    display: flex;
-}
-.gardeners-lightbox-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    border: none;
-    background: rgba(255,255,255,0.2);
-    color: #fff;
-    font-size: 32px;
-    line-height: 1;
-    cursor: pointer;
-    border-radius: 8px;
-    padding: 0;
-}
-.gardeners-lightbox-close:hover { background: rgba(255,255,255,0.3); }
-.gardeners-lightbox-img {
-    max-width: 95vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
 </style>
 @endsection

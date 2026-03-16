@@ -72,7 +72,7 @@
 .ecology-nav-list a:hover { background: #eac31b; color: #1a3c1a; }
 .ecology-section { margin-bottom: 40px; scroll-margin-top: 100px; }
 .ecology-section-title { color: #1a3c1a; font-size: 1.35rem; margin-bottom: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
-.ecology-section p { margin-bottom: 1em; line-height: 1.7; color: #333; }
+.ecology-section p { margin-bottom: 1em; font-size: 1.2rem; line-height: 1.7; color: #333; }
 .ecology-section ul { margin: 0.5em 0 1em 1.5em; padding: 0; }
 .ecology-section li { margin-bottom: 0.5em; }
 .ecology-section a { color: #1a3c1a; text-decoration: none; }

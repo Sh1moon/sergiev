@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 .history-page { padding: 20px 0; max-width: 900px; }
 .history-page .page-title { color: #1a3c1a; margin-bottom: 20px; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
-.history-content { color: #333; line-height: 1.6; }
+.history-content { color: #333; font-size: 1.2rem; line-height: 1.7; }
 .history-content p { margin-bottom: 1em; }
 
 .history-modal-triggers {
@@ -343,7 +343,8 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 24px;
     overflow-y: auto;
     flex: 1;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: 1.7;
     color: #333;
 }
 .history-modal-body p { margin-bottom: 1em; }

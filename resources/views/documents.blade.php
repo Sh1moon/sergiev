@@ -53,10 +53,10 @@
 .documents-articles-title { flex: 1; }
 .documents-section-more { font-size: 0.95rem; color: #eac31b; font-weight: 500; text-decoration: none; }
 .documents-section-more:hover { text-decoration: underline; }
-.charter-content { font-size: 0.95rem; line-height: 1.65; color: #333; }
-.charter-content .charter-title { text-align: center; font-weight: 600; margin-bottom: 20px; font-size: 1.1rem; }
-.charter-content h3 { font-size: 1.05rem; color: #1a3c1a; margin-top: 24px; margin-bottom: 12px; }
-.charter-content h4 { font-size: 1rem; color: #2a5a2a; margin-top: 16px; margin-bottom: 8px; }
+.charter-content { font-size: 1.2rem; line-height: 1.7; color: #333; }
+.charter-content .charter-title { text-align: center; font-weight: 600; margin-bottom: 20px; font-size: 1.25rem; }
+.charter-content h3 { font-size: 1.15rem; color: #1a3c1a; margin-top: 24px; margin-bottom: 12px; }
+.charter-content h4 { font-size: 1.1rem; color: #2a5a2a; margin-top: 16px; margin-bottom: 8px; }
 .charter-content p { margin-bottom: 0.8em; }
 .charter-content ol, .charter-content ul { margin: 0.5em 0 0.5em 1.5em; padding: 0; }
 .charter-content li { margin-bottom: 0.4em; }
