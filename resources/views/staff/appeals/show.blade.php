@@ -23,6 +23,12 @@
             <dd>{{ $appeal->email }}</dd>
             <dt>Телефон</dt>
             <dd>{{ $appeal->phone ?: '—' }}</dd>
+            <dt>Категория проблемы</dt>
+            <dd>{{ $appeal->problemCategory?->name ?: '—' }}</dd>
+            <dt>Подкатегория</dt>
+            <dd>{{ $appeal->problemSubcategory?->name ?: '—' }}</dd>
+            <dt>Детальная проблема</dt>
+            <dd>{{ $appeal->problemDetail?->name ?: '—' }}</dd>
             <dt>Текст обращения</dt>
             <dd class="appeal-detail-body">{{ nl2br(e($appeal->body)) }}</dd>
             @if($appeal->attachment)
@@ -47,6 +53,18 @@
         <div class="appeal-detail-response">
             <h3>Ответ</h3>
             <p>{{ nl2br(e($appeal->response)) }}</p>
+            @if($appeal->responsePhotos->isNotEmpty())
+                <div class="appeal-response-photos">
+                    <p class="appeal-response-photos-title">Фотоотчёт:</p>
+                    <div class="appeal-response-photos-grid">
+                        @foreach($appeal->responsePhotos as $photo)
+                            <a href="{{ route('appeals.response-photo', ['appeal' => $appeal, 'photoId' => $photo->id]) }}" target="_blank" rel="noopener" class="js-img-lightbox appeal-response-photo-link">
+                                <img src="{{ route('appeals.response-photo', ['appeal' => $appeal, 'photoId' => $photo->id]) }}" alt="Фотоотчёт {{ $loop->iteration }}">
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             <div class="appeal-detail-response-meta">
                 {{ $appeal->responded_at->format('d.m.Y H:i') }}
                 @if($appeal->responder)
@@ -55,12 +73,19 @@
             </div>
         </div>
         @else
-        <form action="{{ route('staff.appeals.respond', $appeal) }}" method="POST" class="appeal-respond-form">
+        <form action="{{ route('staff.appeals.respond', $appeal) }}" method="POST" class="appeal-respond-form" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="response" class="form-label">Текст ответа <span class="required">*</span></label>
                 <textarea name="response" id="response" class="form-control @error('response') is-invalid @enderror" rows="6" required>{{ old('response') }}</textarea>
                 @error('response')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
+            <div class="form-group">
+                <label for="response_photos" class="form-label">Фотоотчёт по выполненным работам</label>
+                <input type="file" name="response_photos[]" id="response_photos" class="form-control @error('response_photos') is-invalid @enderror @error('response_photos.*') is-invalid @enderror" accept="image/jpeg,image/jpg,image/png,image/webp" multiple>
+                <small class="form-text text-muted">До 10 фотографий, каждое фото до 5 МБ.</small>
+                @error('response_photos')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                @error('response_photos.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <button type="submit" class="btn btn-primary">Отправить ответ</button>
         </form>
@@ -92,5 +117,10 @@
 .appeal-attachment-link { color: #1a3c1a; font-weight: 500; }
 .appeal-attachment-link:hover { color: #eac31b; }
 .appeal-attachment-hint { font-size: 13px; color: #666; margin-left: 6px; }
+.appeal-response-photos { margin-top: 14px; }
+.appeal-response-photos-title { margin: 0 0 8px; color: #1a3c1a; font-size: 0.98rem; }
+.appeal-response-photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.appeal-response-photo-link { display: block; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0; background: #fff; }
+.appeal-response-photo-link img { width: 100%; height: 100px; object-fit: cover; display: block; }
 </style>
 @endsection

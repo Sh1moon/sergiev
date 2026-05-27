@@ -12,10 +12,10 @@
 <style>
 .our-district-page { padding: 20px 0; max-width: 900px; }
 .our-district-page .page-title { color: #1a3c1a; margin-bottom: 20px; border-bottom: 2px solid #1a3c1a; padding-bottom: 10px; }
-.our-district-content { color: #333; font-size: 1.2rem; line-height: 1.7; }
+.our-district-content { color: #333; font-size: 1.2em; line-height: 1.7; }
 .our-district-content p { margin-bottom: 1em; }
-.our-district-content h2 { color: #1a3c1a; font-size: 1.35rem; margin-top: 2em; margin-bottom: 0.75em; }
-.our-district-content h3 { color: #1a3c1a; font-size: 1.15rem; margin-top: 1.5em; margin-bottom: 0.5em; }
+.our-district-content h2 { color: #1a3c1a; font-size: 1.35em; margin-top: 2em; margin-bottom: 0.75em; }
+.our-district-content h3 { color: #1a3c1a; font-size: 1.15em; margin-top: 1.5em; margin-bottom: 0.5em; }
 .our-district-content ul { margin: 0.75em 0 1em 1.5em; padding: 0; }
 .our-district-content li { margin-bottom: 0.35em; }
 </style>

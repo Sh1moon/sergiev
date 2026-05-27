@@ -1,22 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnticorruptionReport;
 use App\Models\Appeal;
-use App\Models\Role;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller
+class AnalyticsController extends Controller
 {
     public function index()
     {
-        $totalUsers = User::count();
-        $adminCount = User::whereHas('role', fn ($q) => $q->where('slug', Role::ADMIN))->count();
-        $employeeCount = User::whereHas('role', fn ($q) => $q->where('slug', Role::EMPLOYEE))->count();
-        $userCount = User::whereHas('role', fn ($q) => $q->where('slug', Role::USER))->count();
-
         $slaDays = max(1, (int) env('APPEAL_RESPONSE_SLA_DAYS', 7));
 
         $appealsTotal = Appeal::count();
@@ -68,17 +62,48 @@ class DashboardController extends Controller
 
         $avgResponseHours = $this->calculateAverageResponseHours();
 
-        $appealsWithPhone = Appeal::whereNotNull('phone')->where('phone', '!=', '')->count();
-        $appealsWithPostalAddress = Appeal::whereNotNull('postal_address')->where('postal_address', '!=', '')->count();
-        $contactQualityShare = $appealsTotal > 0
-            ? round(100 * max($appealsWithPhone, $appealsWithPostalAddress) / $appealsTotal, 1)
-            : 0.0;
+        $topCategories = Appeal::query()
+            ->leftJoin('problem_categories as pc', 'pc.id', '=', 'appeals.problem_category_id')
+            ->selectRaw("COALESCE(pc.name, 'Без категории') as name, COUNT(*) as total")
+            ->groupBy('name')
+            ->orderByDesc('total')
+            ->limit(8)
+            ->get();
+        $topSubcategories = Appeal::query()
+            ->leftJoin('problem_subcategories as psc', 'psc.id', '=', 'appeals.problem_subcategory_id')
+            ->selectRaw("COALESCE(psc.name, 'Без подкатегории') as name, COUNT(*) as total")
+            ->groupBy('name')
+            ->orderByDesc('total')
+            ->limit(8)
+            ->get();
+        $topDetails = Appeal::query()
+            ->leftJoin('problem_details as pd', 'pd.id', '=', 'appeals.problem_detail_id')
+            ->selectRaw("COALESCE(pd.name, 'Без детальной проблемы') as name, COUNT(*) as total")
+            ->groupBy('name')
+            ->orderByDesc('total')
+            ->limit(8)
+            ->get();
 
-        return view('admin.dashboard', compact(
-            'totalUsers',
-            'adminCount',
-            'employeeCount',
-            'userCount',
+        $topCategoryLabels = $topCategories->pluck('name')->values();
+        $topCategoryValues = $topCategories->pluck('total')->map(fn ($v) => (int) $v)->values();
+        $topSubcategoryLabels = $topSubcategories->pluck('name')->values();
+        $topSubcategoryValues = $topSubcategories->pluck('total')->map(fn ($v) => (int) $v)->values();
+        $topDetailLabels = $topDetails->pluck('name')->values();
+        $topDetailValues = $topDetails->pluck('total')->map(fn ($v) => (int) $v)->values();
+        if ($topCategoryLabels->isEmpty()) {
+            $topCategoryLabels = collect(['Нет данных']);
+            $topCategoryValues = collect([0]);
+        }
+        if ($topSubcategoryLabels->isEmpty()) {
+            $topSubcategoryLabels = collect(['Нет данных']);
+            $topSubcategoryValues = collect([0]);
+        }
+        if ($topDetailLabels->isEmpty()) {
+            $topDetailLabels = collect(['Нет данных']);
+            $topDetailValues = collect([0]);
+        }
+
+        return view('staff.analytics.index', compact(
             'slaDays',
             'incomingTotal',
             'incomingNew',
@@ -96,7 +121,13 @@ class DashboardController extends Controller
             'overdueResolved',
             'overdueShare',
             'avgResponseHours',
-            'contactQualityShare'
+            'topCategories',
+            'topCategoryLabels',
+            'topCategoryValues',
+            'topSubcategoryLabels',
+            'topSubcategoryValues',
+            'topDetailLabels',
+            'topDetailValues',
         ));
     }
 

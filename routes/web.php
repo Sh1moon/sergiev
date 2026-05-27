@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProblemCategoryController;
+use App\Http\Controllers\Api\ProblemCatalogController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -20,9 +21,11 @@ use App\Http\Controllers\Staff\CarouselController;
 use App\Http\Controllers\Staff\VacancyController as StaffVacancyController;
 use App\Http\Controllers\Staff\AdministrationController as StaffAdministrationController;
 use App\Http\Controllers\Staff\ContentController as StaffContentController;
+use App\Http\Controllers\Staff\AnalyticsController as StaffAnalyticsController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\HonoraryCitizensController;
 use App\Http\Controllers\CouncilDeputiesController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
@@ -133,6 +136,7 @@ Route::get('/ecology/construction-waste', function () {
 Route::get('/appeals', [AppealController::class, 'index'])->name('appeals')->middleware('auth');
 Route::post('/appeals', [AppealController::class, 'store'])->name('appeals.store')->middleware('auth');
 Route::get('/appeals/attachment/{appeal}', [AppealController::class, 'attachment'])->name('appeals.attachment')->middleware('auth');
+Route::get('/appeals/{appeal}/response-photo/{photoId}', [AppealController::class, 'responsePhoto'])->name('appeals.response-photo')->middleware('auth');
 Route::get('/appeals/{appeal}/edit', [AppealController::class, 'edit'])->name('appeals.edit')->middleware('auth');
 Route::put('/appeals/{appeal}', [AppealController::class, 'update'])->name('appeals.update')->middleware('auth');
 Route::get('/appeals/{appeal}', [AppealController::class, 'show'])->name('appeals.show')->middleware('auth');
@@ -166,6 +170,19 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
+    Route::get('/analytics', [StaffAnalyticsController::class, 'index'])->name('analytics');
+    Route::resource('problem-categories', ProblemCategoryController::class)->except(['show', 'create', 'edit']);
+    Route::post('/problem-subcategories', [ProblemCategoryController::class, 'storeSubcategory'])->name('problem-subcategories.store');
+    Route::put('/problem-subcategories/{problemSubcategory}', [ProblemCategoryController::class, 'updateSubcategory'])->name('problem-subcategories.update');
+    Route::delete('/problem-subcategories/{problemSubcategory}', [ProblemCategoryController::class, 'destroySubcategory'])->name('problem-subcategories.destroy');
+    Route::post('/problem-details', [ProblemCategoryController::class, 'storeDetail'])->name('problem-details.store');
+    Route::put('/problem-details/{problemDetail}', [ProblemCategoryController::class, 'updateDetail'])->name('problem-details.update');
+    Route::delete('/problem-details/{problemDetail}', [ProblemCategoryController::class, 'destroyDetail'])->name('problem-details.destroy');
+});
+
+Route::middleware(['auth'])->prefix('api')->name('api.')->group(function () {
+    Route::get('/problem-subcategories/{categoryId}', [ProblemCatalogController::class, 'subcategories'])->name('problem-subcategories');
+    Route::get('/problem-details/{subcategoryId}', [ProblemCatalogController::class, 'details'])->name('problem-details');
 });
 
 // Кабинет сотрудника и администратора (контент)
@@ -249,6 +266,7 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::get('/content/management/{row}/edit', [StaffContentController::class, 'managementEdit'])->name('content.management.edit');
     Route::put('/content/management/{row}', [StaffContentController::class, 'managementUpdate'])->name('content.management.update');
     Route::delete('/content/management/{row}', [StaffContentController::class, 'managementDestroy'])->name('content.management.destroy');
+    Route::get('/analytics', [StaffAnalyticsController::class, 'index'])->name('analytics');
 });
 
 // Устаревший префикс employee — редирект в кабинет

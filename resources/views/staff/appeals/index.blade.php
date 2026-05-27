@@ -9,6 +9,18 @@
     <form method="get" class="appeals-toolbar">
         <div class="appeals-search-wrap">
             <input type="text" name="q" value="{{ $search }}" class="form-control appeals-search" placeholder="Поиск по ФИО, email, тексту...">
+            <select name="problem_category_id" id="problem_category_id" class="form-control appeals-filter">
+                <option value="">Все категории</option>
+                @foreach($problemCategories as $category)
+                    <option value="{{ $category->id }}" @selected($selectedCategoryId === $category->id)>{{ $category->name }}</option>
+                @endforeach
+            </select>
+            <select name="problem_subcategory_id" id="problem_subcategory_id" class="form-control appeals-filter">
+                <option value="">Все подкатегории</option>
+            </select>
+            <select name="problem_detail_id" id="problem_detail_id" class="form-control appeals-filter">
+                <option value="">Все детальные проблемы</option>
+            </select>
             <select name="filter" class="form-control appeals-filter">
                 <option value="new" {{ $filter === 'new' ? 'selected' : '' }}>Новые (без ответа)</option>
                 <option value="archived" {{ $filter === 'archived' ? 'selected' : '' }}>Архив (с ответом)</option>
@@ -24,6 +36,9 @@
                     <th>Дата</th>
                     <th>ФИО</th>
                     <th>Контакты</th>
+                    <th>Категория</th>
+                    <th>Подкатегория</th>
+                    <th>Детальная проблема</th>
                     <th>Текст</th>
                     <th>Статус</th>
                     <th></th>
@@ -38,6 +53,9 @@
                         {{ $appeal->email }}
                         @if($appeal->phone)<br><small>{{ $appeal->phone }}</small>@endif
                     </td>
+                    <td>{{ $appeal->problemCategory?->name ?: '—' }}</td>
+                    <td>{{ $appeal->problemSubcategory?->name ?: '—' }}</td>
+                    <td>{{ $appeal->problemDetail?->name ?: '—' }}</td>
                     <td class="appeal-body-cell">{{ Str::limit($appeal->body, 80) }}</td>
                     <td>
                         @if($appeal->responded_at)
@@ -52,7 +70,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6">Нет обращений</td>
+                    <td colspan="9">Нет обращений</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -74,4 +92,58 @@
 .badge-answered { background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
 .btn-sm { padding: 6px 12px; font-size: 14px; }
 </style>
+
+<script>
+    (function () {
+        const categorySelect = document.getElementById('problem_category_id');
+        const subcategorySelect = document.getElementById('problem_subcategory_id');
+        const detailSelect = document.getElementById('problem_detail_id');
+        if (!categorySelect || !subcategorySelect || !detailSelect) return;
+
+        const selectedSubcategory = @json($selectedSubcategoryId);
+        const selectedDetail = @json($selectedDetailId);
+
+        const fillOptions = (select, options, placeholder, selectedValue) => {
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            options.forEach((item) => {
+                const opt = document.createElement('option');
+                opt.value = String(item.id);
+                opt.textContent = item.name;
+                if (selectedValue && String(selectedValue) === String(item.id)) {
+                    opt.selected = true;
+                }
+                select.appendChild(opt);
+            });
+        };
+
+        const loadSubcategories = async (categoryId, selectedValue = null) => {
+            if (!categoryId) {
+                fillOptions(subcategorySelect, [], 'Все подкатегории');
+                fillOptions(detailSelect, [], 'Все детальные проблемы');
+                return;
+            }
+            const response = await fetch(`/api/problem-subcategories/${categoryId}`);
+            const data = await response.json();
+            fillOptions(subcategorySelect, data, 'Все подкатегории', selectedValue);
+            await loadDetails(subcategorySelect.value, selectedDetail);
+        };
+
+        const loadDetails = async (subcategoryId, selectedValue = null) => {
+            if (!subcategoryId) {
+                fillOptions(detailSelect, [], 'Все детальные проблемы');
+                return;
+            }
+            const response = await fetch(`/api/problem-details/${subcategoryId}`);
+            const data = await response.json();
+            fillOptions(detailSelect, data, 'Все детальные проблемы', selectedValue);
+        };
+
+        categorySelect.addEventListener('change', () => loadSubcategories(categorySelect.value, null));
+        subcategorySelect.addEventListener('change', () => loadDetails(subcategorySelect.value, null));
+
+        if (categorySelect.value) {
+            loadSubcategories(categorySelect.value, selectedSubcategory);
+        }
+    })();
+</script>
 @endsection

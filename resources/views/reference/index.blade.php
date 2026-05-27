@@ -155,15 +155,15 @@
 .reference-page-title { color: #1a3c1a; font-size: 1.75rem; margin-bottom: 32px; border-bottom: 2px solid #1a3c1a; padding-bottom: 12px; }
 .reference-section { margin-bottom: 48px; scroll-margin-top: 100px; }
 .reference-section-title { color: #1a3c1a; font-size: 1.35rem; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #d0e0d0; }
-.reference-section-body { font-size: 1.2rem; line-height: 1.7; color: #333; }
+.reference-section-body { font-size: 1.2em; line-height: 1.7; color: #333; }
 .reference-placeholder { color: #666; font-style: italic; }
 
 .reference-district-police { }
 .reference-district-police .ref-block-text { margin-bottom: 14px; }
 .reference-district-police .ref-block-text:last-child { margin-bottom: 0; }
-.reference-district-police .ref-block-title { font-weight: 700; color: #1a3c1a; margin: 22px 0 10px 0; font-size: 1.2rem; line-height: 1.7; padding-left: 0; }
+.reference-district-police .ref-block-title { font-weight: 700; color: #1a3c1a; margin: 22px 0 10px 0; font-size: 1.2em; line-height: 1.7; padding-left: 0; }
 .reference-district-police .ref-block-title:first-of-type { margin-top: 0; }
-.reference-district-police .ref-department-title { font-weight: 700; color: #0f2d0f; margin: 28px 0 12px 0; font-size: 1.2rem; line-height: 1.7; border-bottom: 1px solid #c5e0c5; padding-bottom: 6px; }
+.reference-district-police .ref-department-title { font-weight: 700; color: #0f2d0f; margin: 28px 0 12px 0; font-size: 1.2em; line-height: 1.7; border-bottom: 1px solid #c5e0c5; padding-bottom: 6px; }
 .reference-district-police .ref-department-title:first-of-type { margin-top: 0; }
 
 .reference-district-police .ref-responsible-block { background: #f4f9f4; border-left: 4px solid #1a3c1a; padding: 12px 16px; margin: 12px 0 16px 0; border-radius: 0 6px 6px 0; }
@@ -188,7 +188,7 @@
 .reference-section .honorary-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1.2rem;
+    font-size: 1.2em;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border-radius: 8px;

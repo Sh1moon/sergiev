@@ -29,8 +29,8 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->isAdmin()) {
-                return redirect()->route('admin.dashboard')
-                    ->with('success', 'Добро пожаловать в панель администратора!');
+                return redirect()->route('profile')
+                    ->with('success', 'Добро пожаловать в личный кабинет!');
             }
 
             return redirect()->intended($this->redirectTo)

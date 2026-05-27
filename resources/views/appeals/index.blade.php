@@ -18,6 +18,15 @@
             <li class="my-appeals-item">
                 <div class="my-appeals-item-header">
                     <span class="my-appeals-date">{{ $appeal->created_at->format('d.m.Y H:i') }}</span>
+                    @if($appeal->problemCategory)
+                        <span class="my-appeals-category">{{ $appeal->problemCategory->name }}</span>
+                    @endif
+                    @if($appeal->problemSubcategory)
+                        <span class="my-appeals-category">{{ $appeal->problemSubcategory->name }}</span>
+                    @endif
+                    @if($appeal->problemDetail)
+                        <span class="my-appeals-category">{{ $appeal->problemDetail->name }}</span>
+                    @endif
                     @if($appeal->responded_at)
                         <span class="my-appeals-status my-appeals-status-answered">Ответ получен</span>
                     @else
@@ -123,6 +132,7 @@
 .my-appeals-link:hover { color: #eac31b; }
 .my-appeals-date { font-size: 14px; color: #666; }
 .my-appeals-status { font-size: 13px; padding: 2px 8px; border-radius: 4px; }
+.my-appeals-category { font-size: 12px; padding: 2px 8px; border-radius: 4px; background: #e3f2fd; color: #0b5394; }
 .my-appeals-status-waiting { background: #fff3cd; color: #856404; }
 .my-appeals-status-answered { background: #d4edda; color: #155724; }
 .my-appeals-excerpt { color: #555; font-size: 1.2rem; line-height: 1.7; margin: 0 0 12px 0; }

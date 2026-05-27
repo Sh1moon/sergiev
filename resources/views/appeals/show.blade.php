@@ -25,6 +25,12 @@
             <dd>{{ $appeal->email }}</dd>
             <dt>Телефон</dt>
             <dd>{{ $appeal->phone ?: '—' }}</dd>
+            <dt>Категория проблемы</dt>
+            <dd>{{ $appeal->problemCategory?->name ?: '—' }}</dd>
+            <dt>Подкатегория</dt>
+            <dd>{{ $appeal->problemSubcategory?->name ?: '—' }}</dd>
+            <dt>Детальная проблема</dt>
+            <dd>{{ $appeal->problemDetail?->name ?: '—' }}</dd>
             <dt>Текст обращения</dt>
             <dd class="appeal-detail-body">{{ nl2br(e($appeal->body)) }}</dd>
             @if($appeal->attachment)
@@ -49,6 +55,18 @@
         <div class="appeal-detail-response">
             <h2 class="appeal-response-title">Ответ</h2>
             <p>{{ nl2br(e($appeal->response)) }}</p>
+            @if($appeal->responsePhotos->isNotEmpty())
+                <div class="appeal-response-photos">
+                    <p class="appeal-response-photos-title">Фотоотчёт:</p>
+                    <div class="appeal-response-photos-grid">
+                        @foreach($appeal->responsePhotos as $photo)
+                            <a href="{{ route('appeals.response-photo', ['appeal' => $appeal, 'photoId' => $photo->id]) }}" target="_blank" rel="noopener" class="js-img-lightbox appeal-response-photo-link">
+                                <img src="{{ route('appeals.response-photo', ['appeal' => $appeal, 'photoId' => $photo->id]) }}" alt="Фотоотчёт {{ $loop->iteration }}">
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             <div class="appeal-detail-response-meta">{{ $appeal->responded_at->format('d.m.Y H:i') }}</div>
         </div>
         @endif
@@ -86,6 +104,11 @@
 .appeal-detail-response { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; background: #f9f9f9; padding: 16px; border-radius: 6px; }
 .appeal-response-title { color: #1a3c1a; margin-bottom: 10px; font-size: 1.2rem; }
 .appeal-detail-response-meta { font-size: 13px; color: #666; margin-top: 10px; }
+.appeal-response-photos { margin-top: 14px; }
+.appeal-response-photos-title { margin: 0 0 8px; color: #1a3c1a; font-size: 0.98rem; }
+.appeal-response-photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.appeal-response-photo-link { display: block; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0; background: #fff; }
+.appeal-response-photo-link img { width: 100%; height: 100px; object-fit: cover; display: block; }
 .appeal-actions { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; }
 </style>
 @endsection

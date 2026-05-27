@@ -80,10 +80,10 @@
         @endguest
         @auth
             <p class="home-appeals-intro">Заполните форму ниже или перейдите в раздел <a href="{{ route('appeals') }}">Обращения граждан</a> для просмотра своих обращений.</p>
+            <div class="home-appeals-form-wrap">
+                @include('appeals.partials.form')
+            </div>
         @endauth
-        <div class="home-appeals-form-wrap">
-            @include('appeals.partials.form')
-        </div>
     </section>
 
     <section class="home-quick-links">

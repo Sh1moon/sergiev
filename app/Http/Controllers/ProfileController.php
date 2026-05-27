@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -10,7 +12,22 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        return view('profile', ['user' => auth()->user()]);
+        $user = auth()->user();
+        $adminStats = null;
+
+        if ($user && $user->isAdmin()) {
+            $adminStats = [
+                'totalUsers' => User::count(),
+                'adminCount' => User::whereHas('role', fn ($q) => $q->where('slug', Role::ADMIN))->count(),
+                'employeeCount' => User::whereHas('role', fn ($q) => $q->where('slug', Role::EMPLOYEE))->count(),
+                'userCount' => User::whereHas('role', fn ($q) => $q->where('slug', Role::USER))->count(),
+            ];
+        }
+
+        return view('profile', [
+            'user' => $user,
+            'adminStats' => $adminStats,
+        ]);
     }
 
     public function updatePassword(Request $request)

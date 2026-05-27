@@ -123,18 +123,7 @@
               <span class="user-dropdown-arrow" aria-hidden="true">▼</span>
             </button>
             <div class="user-dropdown" id="userDropdown" hidden>
-              @if(Auth::user()->isAdmin())
-                <a href="{{ route('admin.dashboard') }}" class="user-dropdown-link">Админ-панель</a>
-              @endif
-              @if(Auth::user()->isAdmin() || Auth::user()->isEmployee())
-                <a href="{{ route('staff.articles.index') }}" class="user-dropdown-link">Кабинет</a>
-                <a href="{{ route('staff.vacancies.index') }}" class="user-dropdown-link">Вакансии</a>
-                <a href="{{ route('staff.administration.index') }}" class="user-dropdown-link">Администрация</a>
-                <a href="{{ route('staff.content.index') }}" class="user-dropdown-link">Контент</a>
-                <a href="{{ route('staff.appeals.index') }}" class="user-dropdown-link">Обращения граждан</a>
-                <a href="{{ route('staff.anticorruption.index') }}" class="user-dropdown-link">Сообщения об антикоррупции</a>
-              @endif
-              <a href="{{ route('profile') }}" class="user-dropdown-link">Сменить пароль</a>
+              <a href="{{ route('profile') }}" class="user-dropdown-link">Личный кабинет</a>
               <form method="POST" action="{{ route('logout') }}" class="user-dropdown-form">
                 @csrf
                 <button type="submit" class="user-dropdown-link user-dropdown-logout">Выйти</button>
@@ -309,9 +298,6 @@
         @auth
         <div class="mobile-controls">
           <div class="mobile-controls-title">Управление</div>
-          @if(Auth::user()->isAdmin())
-            <a href="{{ route('admin.dashboard') }}" class="mobile-controls-link">Админ-панель</a>
-          @endif
 @if(Auth::user()->isAdmin() || Auth::user()->isEmployee())
               <a href="{{ route('staff.articles.index') }}" class="mobile-controls-link">Кабинет</a>
               <a href="{{ route('staff.vacancies.index') }}" class="mobile-controls-link">Вакансии</a>
