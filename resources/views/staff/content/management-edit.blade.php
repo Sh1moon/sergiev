@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Содержимое (название, адрес, руководитель, телефон, email) *</label>
-            <textarea name="content" class="form-control" rows="8" required>{{ old('content', $row->content) }}</textarea>
+            <textarea name="content" class="form-control js-summernote" rows="8" required>{{ old('content', $row->content) }}</textarea>
             @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

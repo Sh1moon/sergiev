@@ -42,7 +42,7 @@
                             {{ $article->published_at?->format('d.m.Y') }}
                         </time>
                         @if($article->excerpt)
-                            <p class="article-card-excerpt">{{ Str::limit($article->excerpt, 160) }}</p>
+                            <p class="article-card-excerpt">{{ Str::limit(strip_tags($article->excerpt), 160) }}</p>
                         @endif
                         <span class="article-card-more">Читать далее</span>
                     </div>

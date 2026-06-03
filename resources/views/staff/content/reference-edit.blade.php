@@ -12,7 +12,7 @@
         @method('PUT')
         <div class="form-group">
             <label class="form-label">Содержимое</label>
-            <textarea name="content" class="form-control" rows="25">{{ old('content', $section->content) }}</textarea>
+            <textarea name="content" class="form-control js-summernote" rows="25">{{ old('content', $section->content) }}</textarea>
             <small>Текст с переносами строк. Для «Участковых» — используйте структуру с «Ответственный:», «Замещает ответственного:». Для «Экстренных служб» — строки вида «Название — телефон».</small>
             @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>

@@ -24,7 +24,7 @@
         @if($report->response)
         <div class="report-detail-response">
             <h3>Ответ</h3>
-            <p>{{ nl2br(e($report->response)) }}</p>
+            <div class="report-response-text">{!! $report->response !!}</div>
             <div class="report-detail-response-meta">
                 {{ $report->responded_at->format('d.m.Y H:i') }}
                 @if($report->responder)
@@ -37,7 +37,7 @@
             @csrf
             <div class="form-group">
                 <label for="response" class="form-label">Текст ответа <span class="required">*</span></label>
-                <textarea name="response" id="response" class="form-control @error('response') is-invalid @enderror" rows="6" required>{{ old('response') }}</textarea>
+                <textarea name="response" id="response" class="form-control @error('response') is-invalid @enderror js-summernote" rows="6" required>{{ old('response') }}</textarea>
                 @error('response')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <button type="submit" class="btn btn-primary">Отправить ответ</button>
@@ -57,6 +57,10 @@
 .report-detail-body { white-space: pre-wrap; }
 .report-detail-response { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; background: #f9f9f9; padding: 16px; border-radius: 6px; }
 .report-detail-response h3 { color: #1a3c1a; margin-bottom: 10px; font-size: 1.1rem; }
+.report-response-text p { margin: 0 0 0.7em; }
+.report-response-text ul, .report-response-text ol { margin: 0.7em 0 0.7em 1.2em; padding-left: 1em; }
+.report-response-text ul { list-style: disc; }
+.report-response-text ol { list-style: decimal; }
 .report-detail-response-meta { font-size: 13px; color: #666; margin-top: 10px; }
 .report-respond-form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; }
 .required { color: #dc3545; }

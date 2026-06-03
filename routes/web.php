@@ -44,6 +44,7 @@ Route::get('/news', [ArticleController::class, 'index'])->name('news.index')->de
 Route::get('/sections/{sectionSlug}', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/news/{article:slug}', [ArticleController::class, 'show'])->name('news.show');
 Route::get('/sections/{sectionSlug}/{article:slug}', [ArticleController::class, 'showWithSection'])->name('articles.show');
+Route::get('/articles/{article:slug}/files/{file}', [StaffArticleController::class, 'showFile'])->name('articles.files.show');
 
 // Госадмтехнадзор и Информация — разделы статей (как новости)
 Route::get('/gosadmtechnadzor', [ArticleController::class, 'index'])->name('gosadmtechnadzor')->defaults('sectionSlug', 'gosadmtechnadzor');

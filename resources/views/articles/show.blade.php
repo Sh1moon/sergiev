@@ -39,7 +39,7 @@
     </div>
 
     <div class="article-detail-body">
-        {!! nl2br(e($article->body)) !!}
+        {!! $article->body !!}
     </div>
 
     @if($article->files->isNotEmpty())
@@ -48,7 +48,7 @@
         <ul>
             @foreach($article->files as $file)
             <li>
-                <a href="{{ Storage::url($file->path) }}" target="_blank" rel="noopener">{{ $file->original_name }}</a>
+                <a href="{{ route('articles.files.show', [$article, $file]) }}" target="_blank" rel="noopener">{{ $file->original_name }}</a>
             </li>
             @endforeach
         </ul>
@@ -74,6 +74,11 @@
 .article-detail-placeholder-logo { max-width: 280px; width: 60%; height: auto; object-fit: contain;  opacity: 0.9; }
 .article-detail-body { font-size: 1.2rem; line-height: 1.7; color: #1a3c1a; margin-bottom: 32px; }
 .article-detail-body p { margin-bottom: 1em; }
+.article-detail-body ul, .article-detail-body ol { margin: 0.8em 0 0.8em 1.4em; padding-left: 1.2em; }
+.article-detail-body ul { list-style: disc; }
+.article-detail-body ol { list-style: decimal; }
+.article-detail-body a { color: #1a3c1a; text-decoration: underline; }
+.article-detail-body a:hover { color: #eac31b; }
 .article-detail-files { margin-bottom: 24px; padding: 16px; background: #f5f5f5; border-radius: 8px; }
 .article-detail-files h3 { color: #1a3c1a; margin-bottom: 12px; font-size: 1.1rem; }
 .article-detail-files ul { list-style: none; padding: 0; margin: 0; }

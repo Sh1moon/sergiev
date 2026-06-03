@@ -33,7 +33,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Описание</label>
-            <textarea name="description" class="form-control" rows="6">{{ old('description', $deputy->description) }}</textarea>
+            <textarea name="description" class="form-control js-summernote" rows="6">{{ old('description', $deputy->description) }}</textarea>
             @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

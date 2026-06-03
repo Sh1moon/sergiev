@@ -61,7 +61,7 @@
                             <h2 class="news-preview-article-card-title">{{ $item->title }}</h2>
                             <time class="news-preview-article-card-date" datetime="{{ $item->published_at?->toIso8601String() }}">{{ $item->published_at?->format('d.m.Y') }}</time>
                             @if($item->excerpt)
-                                <p class="news-preview-article-card-excerpt">{{ Str::limit($item->excerpt, 160) }}</p>
+                                <p class="news-preview-article-card-excerpt">{{ Str::limit(strip_tags($item->excerpt), 160) }}</p>
                             @endif
                             <span class="news-preview-article-card-more">Читать далее</span>
                         </div>

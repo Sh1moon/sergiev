@@ -22,7 +22,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Телефон, e-mail</label>
-            <textarea name="contacts" class="form-control" rows="2">{{ old('contacts', $territory->contacts) }}</textarea>
+            <textarea name="contacts" class="form-control js-summernote" rows="2">{{ old('contacts', $territory->contacts) }}</textarea>
             @error('contacts')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

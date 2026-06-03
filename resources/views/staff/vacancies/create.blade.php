@@ -16,7 +16,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Описание, требования</label>
-            <textarea name="body" class="form-control" rows="12">{{ old('body') }}</textarea>
+            <textarea name="body" class="form-control js-summernote" rows="12">{{ old('body') }}</textarea>
             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

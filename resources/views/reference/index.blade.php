@@ -18,24 +18,24 @@
                         @if($entry->responsible || $entry->substitute)
                             <div class="ref-responsible-block">
                                 @if($entry->responsible)
-                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Ответственный:</span> {{ $entry->responsible }}</p>
+                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Ответственный:</span> {!! $entry->responsible !!}</p>
                                 @endif
                                 @if($entry->substitute)
-                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Замещает ответственного:</span> {{ $entry->substitute }}</p>
+                                    <p class="ref-responsible-line"><span class="ref-responsible-label">Замещает ответственного:</span> {!! $entry->substitute !!}</p>
                                 @endif
                             </div>
                         @endif
                         @if($entry->residential_sector)
-                            <p class="ref-block-text"><strong class="ref-sector-label">Жилой сектор</strong> – {!! nl2br(e($entry->residential_sector)) !!}</p>
+                            <div class="ref-block-text"><strong class="ref-sector-label">Жилой сектор</strong> – {!! $entry->residential_sector !!}</div>
                         @endif
                         @if($entry->reception_days)
-                            <p class="ref-block-text"><strong class="ref-sector-label">Дни приема граждан:</strong> {!! nl2br(e($entry->reception_days)) !!}</p>
+                            <div class="ref-block-text"><strong class="ref-sector-label">Дни приема граждан:</strong> {!! $entry->reception_days !!}</div>
                         @endif
                         @if($entry->leadership_reception_days)
-                            <p class="ref-block-text"><strong class="ref-sector-label">Дни приема ответственного от руководства:</strong> {!! nl2br(e($entry->leadership_reception_days)) !!}</p>
+                            <div class="ref-block-text"><strong class="ref-sector-label">Дни приема ответственного от руководства:</strong> {!! $entry->leadership_reception_days !!}</div>
                         @endif
                         @if($entry->reception_place)
-                            <p class="ref-block-text"><strong class="ref-sector-label">Место приема граждан:</strong> {!! nl2br(e($entry->reception_place)) !!}</p>
+                            <div class="ref-block-text"><strong class="ref-sector-label">Место приема граждан:</strong> {!! $entry->reception_place !!}</div>
                         @endif
                     </div>
                 @endforeach

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Сергиево-Посадский округ')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css">
     @stack('styles')
     <style>
         /* Шрифты SK Posad */
@@ -180,6 +182,32 @@
         .pagination li a:hover { background: #2a5a2a; color: #eac31b; }
         .pagination li.active span { background: #eac31b; color: #1a3c1a; }
         .pagination li.disabled span { background: #ccc; color: #666; }
+        .note-editor.note-frame {
+            border: 1px solid #d4dbe2;
+            border-radius: 6px;
+            background: #fff;
+        }
+        .note-editor .note-toolbar {
+            border-bottom: 1px solid #d4dbe2;
+            background: #f8fafc;
+        }
+        .note-editor .note-editing-area .note-editable {
+            min-height: 220px;
+            line-height: 1.6;
+            color: #1f2937;
+        }
+        .note-editor .note-editing-area .note-editable ul,
+        .note-editor .note-editing-area .note-editable ol {
+            margin: 0.8em 0 0.8em 1.4em;
+            padding-left: 1.2em;
+            list-style: initial;
+        }
+        .note-editor .note-editing-area .note-editable ol {
+            list-style: decimal;
+        }
+        .note-editor .note-editing-area .note-editable p {
+            margin: 0 0 0.8em;
+        }
     </style>
     <style>
     /* ===== HEADER (шапка) ===== */
@@ -1328,6 +1356,44 @@
     </script>
     @include('components.confirm-delete-modal')
     @include('components.img-lightbox')
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/lang/summernote-ru-RU.min.js"></script>
+    <script>
+        (function () {
+            function initSummernote() {
+                if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.summernote) return;
+                var $editors = window.jQuery('textarea.js-summernote');
+                if (!$editors.length) return;
+                $editors.each(function () {
+                    var $el = window.jQuery(this);
+                    if ($el.data('summernote')) return;
+                    $el.summernote({
+                        lang: 'ru-RU',
+                        height: 280,
+                        placeholder: 'Введите текст...',
+                        toolbar: [
+                            ['style', ['bold', 'italic', 'underline', 'clear']],
+                            ['font', ['strikethrough']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['insert', ['link', 'table']],
+                            ['view', ['codeview']]
+                        ],
+                        callbacks: {
+                            onImageUpload: function () {
+                                alert('Загрузка изображений прямо в текст отключена. Добавляйте изображения через отдельные поля формы.');
+                            }
+                        }
+                    });
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSummernote);
+            } else {
+                initSummernote();
+            }
+        })();
+    </script>
     @stack('scripts')
 </body>
 </html>

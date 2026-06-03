@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\ArticleFile;
 use App\Models\ArticleSection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -54,7 +55,7 @@ class ArticleController extends Controller
         $request->validate([
             'article_section_id' => 'required|exists:article_sections,id',
             'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
+            'excerpt' => 'nullable|string|max:20',
             'body' => 'nullable|string',
             'image' => 'nullable|image|max:10240',
             'published_at' => 'nullable|date',
@@ -101,9 +102,10 @@ class ArticleController extends Controller
         $request->validate([
             'article_section_id' => 'required|exists:article_sections,id',
             'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
+            'excerpt' => 'nullable|string|max:20',
             'body' => 'nullable|string',
-            'image' => 'nullable|image|max:5120',
+            // Держим одинаковый лимит изображения при создании и редактировании
+            'image' => 'nullable|image|max:10240',
             'published_at' => 'nullable|date',
             'files.*' => array_merge(['nullable'], $this->fileUploadRules()),
         ]);
@@ -163,8 +165,43 @@ class ArticleController extends Controller
         return back()->with('success', 'Файл удалён');
     }
 
+    public function showFile(Article $article, ArticleFile $file): Response
+    {
+        if ($file->article_id !== $article->id) {
+            abort(404);
+        }
+
+        $disk = Storage::disk('public');
+        if (!$disk->exists($file->path)) {
+            abort(404);
+        }
+
+        $fullPath = $disk->path($file->path);
+        $mime = $disk->mimeType($file->path) ?: 'application/octet-stream';
+        $filename = $file->original_name ?: basename($file->path);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => "inline; filename*=UTF-8''" . rawurlencode($filename),
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+    }
+
     /** Максимальный размер файла статьи в КБ (100 МБ). */
     private const FILE_MAX_KB = 102400;
+    /** Форматы, которые обычно открываются прямо в браузере. */
+    private const INLINE_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'txt', 'csv'];
+    private const INLINE_MIME_TYPES = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'text/plain',
+        'text/csv',
+        'application/csv',
+        'application/vnd.ms-excel', // часто используется для csv
+    ];
 
     /**
      * Правила валидации загружаемых файлов статей.
@@ -194,6 +231,19 @@ class ArticleController extends Controller
                 }
                 if ($value->getSize() > self::FILE_MAX_KB * 1024) {
                     $fail('Размер файла не должен превышать 100 МБ.');
+                    return;
+                }
+
+                $ext = strtolower((string) $value->getClientOriginalExtension());
+                $mime = strtolower((string) ($value->getMimeType() ?: ''));
+
+                if (!in_array($ext, self::INLINE_EXTENSIONS, true)) {
+                    $fail('Разрешены только файлы для открытия в браузере: PDF, JPG, JPEG, PNG, GIF, WEBP, TXT, CSV.');
+                    return;
+                }
+
+                if ($mime !== '' && !in_array($mime, self::INLINE_MIME_TYPES, true)) {
+                    $fail('Неподдерживаемый MIME-тип файла. Разрешены только PDF, изображения, TXT и CSV.');
                 }
             },
         ];

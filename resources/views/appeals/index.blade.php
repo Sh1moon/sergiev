@@ -43,7 +43,7 @@
                 @if($appeal->response)
                 <div class="my-appeals-response">
                     <strong>Ответ:</strong>
-                    <p>{{ nl2br(e($appeal->response)) }}</p>
+                    <div class="my-appeals-response-text">{!! $appeal->response !!}</div>
                     <span class="my-appeals-response-date">{{ $appeal->responded_at->format('d.m.Y') }}</span>
                 </div>
                 @endif
@@ -138,7 +138,11 @@
 .my-appeals-excerpt { color: #555; font-size: 1.2rem; line-height: 1.7; margin: 0 0 12px 0; }
 .my-appeals-response { background: #f5f5f5; padding: 12px; border-radius: 6px; margin-top: 12px; }
 .my-appeals-response strong { color: #1a3c1a; }
-.my-appeals-response p { margin: 8px 0 0 0; color: #333; }
+.my-appeals-response-text { margin-top: 8px; color: #333; }
+.my-appeals-response-text p { margin: 0 0 0.6em; }
+.my-appeals-response-text ul, .my-appeals-response-text ol { margin: 0.6em 0 0.6em 1.2em; padding-left: 1em; }
+.my-appeals-response-text ul { list-style: disc; }
+.my-appeals-response-text ol { list-style: decimal; }
 .my-appeals-response-date { font-size: 12px; color: #666; }
 </style>
 @endsection

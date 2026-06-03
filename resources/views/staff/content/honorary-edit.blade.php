@@ -22,7 +22,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Сведения о человеке</label>
-            <textarea name="person_info" class="form-control" rows="2">{{ old('person_info', $honorary->person_info) }}</textarea>
+            <textarea name="person_info" class="form-control js-summernote" rows="2">{{ old('person_info', $honorary->person_info) }}</textarea>
             @error('person_info')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

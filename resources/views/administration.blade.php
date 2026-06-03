@@ -21,9 +21,7 @@
             <div class="head-info">
                 <p class="head-caption">{{ $head->title }}</p>
                 @if($head->description)
-                    @foreach(explode("\n\n", $head->description) as $paragraph)
-                        @if(trim($paragraph))<p>{{ trim($paragraph) }}</p>@endif
-                    @endforeach
+                    <div class="rich-text-content">{!! $head->description !!}</div>
                 @endif
             </div>
         </div>
@@ -44,8 +42,8 @@
             <div class="deputy-content">
                 <h3 class="deputy-name">{{ $deputy->name }}</h3>
                 @if($deputy->position)<p class="deputy-position">{{ $deputy->position }}</p>@endif
-                @if($deputy->description)<p>{{ $deputy->description }}</p>@endif
-                @if($deputy->contacts)<p class="deputy-contacts">{{ $deputy->contacts }}</p>@endif
+                @if($deputy->description)<div class="rich-text-content">{!! $deputy->description !!}</div>@endif
+                @if($deputy->contacts)<div class="deputy-contacts rich-text-content">{!! $deputy->contacts !!}</div>@endif
             </div>
         </article>
         @empty
@@ -62,11 +60,7 @@
             @if($dept->head_text)<p class="dept-head">{{ $dept->head_text }}</p>@endif
             @if($dept->schedule_text)<p class="dept-schedule">{{ $dept->schedule_text }}</p>@endif
             @if($dept->body)
-            <ul class="dept-list">
-                @foreach(array_filter(explode("\n", $dept->body)) as $line)
-                <li>{!! nl2br(e(trim($line))) !!}</li>
-                @endforeach
-            </ul>
+                <div class="dept-list rich-text-content">{!! $dept->body !!}</div>
             @endif
         </div>
         @empty
@@ -85,7 +79,7 @@
             @if($inst->phones)<p><strong>Телефоны:</strong> {{ $inst->phones }}</p>@endif
             @if($inst->email)<p><strong>E-mail:</strong> <a href="mailto:{{ $inst->email }}">{{ $inst->email }}</a></p>@endif
             @if($inst->website)<p><strong>Сайт:</strong> <a href="{{ $inst->website }}" target="_blank" rel="noopener">{{ Str::limit($inst->website, 50) }}</a></p>@endif
-            @if($inst->description)<p>{{ $inst->description }}</p>@endif
+            @if($inst->description)<div class="rich-text-content">{!! $inst->description !!}</div>@endif
         </div>
         @empty
         <p>Список учреждений пока не заполнен.</p>
@@ -150,6 +144,12 @@
 .head-info { flex: 1; min-width: 0; }
 .head-caption { font-size: 1.35rem; font-weight: 600; color: #1a3c1a; margin-bottom: 16px; }
 .head-info p { margin-bottom: 1em; color: #333; line-height: 1.7; }
+.rich-text-content p { margin-bottom: 0.8em; color: #333; line-height: 1.7; }
+.rich-text-content ul, .rich-text-content ol { margin: 0.6em 0 0.8em 1.2em; padding-left: 1.2em; }
+.rich-text-content ul { list-style: disc; }
+.rich-text-content ol { list-style: decimal; }
+.rich-text-content a { color: #1a3c1a; text-decoration: underline; }
+.rich-text-content a:hover { color: #eac31b; }
 
 .deputy-block { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin-bottom: 36px; }
 .deputy-photo-wrap { flex-shrink: 0; width: 180px; }
@@ -173,11 +173,10 @@
 }
 
 .dept-group { margin-bottom: 28px; }
-.dept-management { font-size: 1.1rem; color: #1a3c1a; margin-bottom: 8px; }
-.dept-head { font-size: 0.95rem; color: #444; margin-bottom: 8px; }
+.dept-management { font-size: 1.5rem; color: #1a3c1a; margin-bottom: 8px; }
+.dept-head { font-size: 1.2rem; color: #444; margin-bottom: 8px; }
 .dept-schedule { font-size: 0.9rem; color: #666; margin-bottom: 6px; font-style: italic; }
-.dept-list { margin: 0 0 0 1.2em; padding: 0; }
-.dept-list li { margin-bottom: 6px; color: #333; line-height: 1.7; }
+.dept-list { margin: 0; padding: 0; }
 
 .institution-card { background: #f8faf8; border-radius: 8px; padding: 18px; margin-bottom: 20px; border-left: 4px solid #1a3c1a; }
 .institution-card h3 { font-size: 1.05rem; color: #1a3c1a; margin-bottom: 12px; }

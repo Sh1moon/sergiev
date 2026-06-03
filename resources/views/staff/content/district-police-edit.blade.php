@@ -23,32 +23,32 @@
         </div>
         <div class="form-group">
             <label class="form-label">Ответственный</label>
-            <textarea name="responsible" class="form-control" rows="2">{{ old('responsible', $entry->responsible) }}</textarea>
+            <textarea name="responsible" class="form-control js-summernote" rows="2">{{ old('responsible', $entry->responsible) }}</textarea>
             @error('responsible')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Замещает ответственного</label>
-            <textarea name="substitute" class="form-control" rows="2">{{ old('substitute', $entry->substitute) }}</textarea>
+            <textarea name="substitute" class="form-control js-summernote" rows="2">{{ old('substitute', $entry->substitute) }}</textarea>
             @error('substitute')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Жилой сектор</label>
-            <textarea name="residential_sector" class="form-control" rows="6">{{ old('residential_sector', $entry->residential_sector) }}</textarea>
+            <textarea name="residential_sector" class="form-control js-summernote" rows="6">{{ old('residential_sector', $entry->residential_sector) }}</textarea>
             @error('residential_sector')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Дни приема граждан</label>
-            <textarea name="reception_days" class="form-control" rows="3">{{ old('reception_days', $entry->reception_days) }}</textarea>
+            <textarea name="reception_days" class="form-control js-summernote" rows="3">{{ old('reception_days', $entry->reception_days) }}</textarea>
             @error('reception_days')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Дни приема ответственного от руководства</label>
-            <textarea name="leadership_reception_days" class="form-control" rows="2">{{ old('leadership_reception_days', $entry->leadership_reception_days) }}</textarea>
+            <textarea name="leadership_reception_days" class="form-control js-summernote" rows="2">{{ old('leadership_reception_days', $entry->leadership_reception_days) }}</textarea>
             @error('leadership_reception_days')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Место приема граждан</label>
-            <textarea name="reception_place" class="form-control" rows="3">{{ old('reception_place', $entry->reception_place) }}</textarea>
+            <textarea name="reception_place" class="form-control js-summernote" rows="3">{{ old('reception_place', $entry->reception_place) }}</textarea>
             @error('reception_place')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-actions">

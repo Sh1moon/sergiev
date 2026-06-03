@@ -17,7 +17,7 @@
             <div class="profile-links-grid">
                 <a href="{{ route('staff.articles.index') }}" class="profile-quick-link">
                     <span class="profile-quick-link-icon" aria-hidden="true">📁</span>
-                    <span>Кабинет</span>
+                    <span>Статьи</span>
                 </a>
                 <a href="{{ route('staff.vacancies.index') }}" class="profile-quick-link">
                     <span class="profile-quick-link-icon" aria-hidden="true">💼</span>

@@ -26,12 +26,12 @@
         </div>
         <div class="form-group">
             <label class="form-label">Краткое описание</label>
-            <textarea name="excerpt" class="form-control" rows="2" maxlength="500">{{ old('excerpt', $article->excerpt) }}</textarea>
+            <textarea name="excerpt" class="form-control" rows="2" maxlength="20">{{ old('excerpt', $article->excerpt) }}</textarea>
             @error('excerpt')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Текст статьи</label>
-            <textarea name="body" class="form-control" rows="12">{{ old('body', $article->body) }}</textarea>
+            <textarea name="body" class="form-control js-summernote" rows="12">{{ old('body', $article->body) }}</textarea>
             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
@@ -49,30 +49,31 @@
         </div>
         <div class="form-group">
             <label class="form-label">Добавить файлы</label>
-            <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.doc,.docx,.xls,.xlsx">
+            <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.txt,.csv">
         </div>
-        @if($article->files->isNotEmpty())
-        <div class="form-group">
-            <label class="form-label">Прикреплённые файлы</label>
-            <ul class="file-list">
-                @foreach($article->files as $file)
-                <li>
-                    <a href="{{ Storage::url($file->path) }}" target="_blank" rel="noopener">{{ $file->original_name }}</a>
-                    <form action="{{ route('staff.articles.files.destroy', [$article, $file]) }}" method="POST" style="display: inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm js-confirm-delete" data-confirm-message="Удалить файл?">Удалить</button>
-                    </form>
-                </li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Сохранить</button>
             <a href="{{ route('staff.articles.index') }}" class="btn">Отмена</a>
         </div>
     </form>
+
+    @if($article->files->isNotEmpty())
+    <div class="form-group" style="margin-top: 24px;">
+        <label class="form-label">Прикреплённые файлы</label>
+        <ul class="file-list">
+            @foreach($article->files as $file)
+            <li>
+                <a href="{{ route('articles.files.show', [$article, $file]) }}" target="_blank" rel="noopener">{{ $file->original_name }}</a>
+                <form action="{{ route('staff.articles.files.destroy', [$article, $file]) }}" method="POST" style="display: inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm js-confirm-delete" data-confirm-message="Удалить файл?">Удалить</button>
+                </form>
+            </li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 </div>
 
 <style>

@@ -52,7 +52,7 @@
         @if($appeal->response)
         <div class="appeal-detail-response">
             <h3>Ответ</h3>
-            <p>{{ nl2br(e($appeal->response)) }}</p>
+            <div class="appeal-response-text">{!! $appeal->response !!}</div>
             @if($appeal->responsePhotos->isNotEmpty())
                 <div class="appeal-response-photos">
                     <p class="appeal-response-photos-title">Фотоотчёт:</p>
@@ -77,7 +77,7 @@
             @csrf
             <div class="form-group">
                 <label for="response" class="form-label">Текст ответа <span class="required">*</span></label>
-                <textarea name="response" id="response" class="form-control @error('response') is-invalid @enderror" rows="6" required>{{ old('response') }}</textarea>
+                <textarea name="response" id="response" class="form-control @error('response') is-invalid @enderror js-summernote" rows="6" required>{{ old('response') }}</textarea>
                 @error('response')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="form-group">
@@ -104,6 +104,10 @@
 .appeal-detail-body { white-space: pre-wrap; }
 .appeal-detail-response { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; background: #f9f9f9; padding: 16px; border-radius: 6px; }
 .appeal-detail-response h3 { color: #1a3c1a; margin-bottom: 10px; font-size: 1.1rem; }
+.appeal-response-text p { margin: 0 0 0.7em; }
+.appeal-response-text ul, .appeal-response-text ol { margin: 0.7em 0 0.7em 1.2em; padding-left: 1em; }
+.appeal-response-text ul { list-style: disc; }
+.appeal-response-text ol { list-style: decimal; }
 .appeal-detail-response-meta { font-size: 13px; color: #666; margin-top: 10px; }
 .appeal-respond-form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e8e8e8; }
 .required { color: #dc3545; }

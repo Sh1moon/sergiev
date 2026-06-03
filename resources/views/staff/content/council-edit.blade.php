@@ -28,12 +28,12 @@
         </div>
         <div class="form-group">
             <label class="form-label">Информация (округ, партия и т.д.)</label>
-            <textarea name="info" class="form-control" rows="6">{{ old('info', $council->info) }}</textarea>
+            <textarea name="info" class="form-control js-summernote" rows="6">{{ old('info', $council->info) }}</textarea>
             @error('info')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Контакты (телефон, email, VK, приём)</label>
-            <textarea name="contacts" class="form-control" rows="4">{{ old('contacts', $council->contacts) }}</textarea>
+            <textarea name="contacts" class="form-control js-summernote" rows="4">{{ old('contacts', $council->contacts) }}</textarea>
             @error('contacts')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">

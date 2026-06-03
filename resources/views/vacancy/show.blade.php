@@ -12,7 +12,7 @@
         </div>
     </header>
     <div class="vacancy-detail-body">
-        {!! nl2br(e($vacancy->body)) !!}
+        {!! $vacancy->body !!}
     </div>
 </article>
 <style>
@@ -22,5 +22,11 @@
 .vacancy-detail-title { color: #1a3c1a; margin-bottom: 12px; }
 .vacancy-detail-meta { color: #666; font-size: 0.95rem; margin-bottom: 24px; }
 .vacancy-detail-body { line-height: 1.7; color: #333; }
+.vacancy-detail-body p { margin-bottom: 0.8em; }
+.vacancy-detail-body ul, .vacancy-detail-body ol { margin: 0.8em 0 0.8em 1.4em; padding-left: 1.2em; }
+.vacancy-detail-body ul { list-style: disc; }
+.vacancy-detail-body ol { list-style: decimal; }
+.vacancy-detail-body a { color: #1a5c1a; text-decoration: underline; }
+.vacancy-detail-body a:hover { color: #eac31b; }
 </style>
 @endsection

@@ -25,12 +25,12 @@
         </div>
         <div class="form-group">
             <label class="form-label">Краткое описание</label>
-            <textarea name="excerpt" class="form-control" rows="2" maxlength="500">{{ old('excerpt') }}</textarea>
+            <textarea name="excerpt" class="form-control" rows="2" maxlength="20">{{ old('excerpt') }}</textarea>
             @error('excerpt')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
             <label class="form-label">Текст статьи</label>
-            <textarea name="body" class="form-control" rows="12">{{ old('body') }}</textarea>
+            <textarea name="body" class="form-control js-summernote" rows="12">{{ old('body') }}</textarea>
             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-group">
@@ -45,7 +45,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Файлы (открываются в новой вкладке)</label>
-            <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.doc,.docx,.xls,.xlsx">
+            <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.txt,.csv">
             @error('files.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
         <div class="form-actions">

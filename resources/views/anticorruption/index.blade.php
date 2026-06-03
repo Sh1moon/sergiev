@@ -54,7 +54,7 @@
                 @if($report->response)
                 <div class="my-reports-response">
                     <strong>Ответ:</strong>
-                    <p>{{ nl2br(e($report->response)) }}</p>
+                    <div class="my-reports-response-text">{!! $report->response !!}</div>
                     <span class="my-reports-response-date">{{ $report->responded_at->format('d.m.Y') }}</span>
                 </div>
                 @endif
@@ -85,7 +85,11 @@
 .my-reports-excerpt { color: #555; line-height: 1.5; margin: 0 0 12px 0; }
 .my-reports-response { background: #f5f5f5; padding: 12px; border-radius: 6px; margin-top: 12px; }
 .my-reports-response strong { color: #1a3c1a; }
-.my-reports-response p { margin: 8px 0 0 0; color: #333; }
+.my-reports-response-text { margin-top: 8px; color: #333; }
+.my-reports-response-text p { margin: 0 0 0.6em; }
+.my-reports-response-text ul, .my-reports-response-text ol { margin: 0.6em 0 0.6em 1.2em; padding-left: 1em; }
+.my-reports-response-text ul { list-style: disc; }
+.my-reports-response-text ol { list-style: decimal; }
 .my-reports-response-date { font-size: 12px; color: #666; }
 </style>
 @endsection

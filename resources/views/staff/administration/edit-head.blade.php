@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Описание</label>
-            <textarea name="description" class="form-control" rows="14">{{ old('description', $head->description) }}</textarea>
+            <textarea name="description" class="form-control js-summernote" rows="14">{{ old('description', $head->description) }}</textarea>
             <small class="form-hint">Каждый абзац — с новой строки (двойной перенос строки между абзацами).</small>
             @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>

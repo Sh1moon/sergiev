@@ -27,7 +27,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Список отделов (каждая строка — отдел и руководитель)</label>
-            <textarea name="body" class="form-control" rows="12">{{ old('body', $department->body) }}</textarea>
+            <textarea name="body" class="form-control js-summernote" rows="12">{{ old('body', $department->body) }}</textarea>
             <small>Формат: <strong>Название отдела</strong> — ФИО, контакты. Каждый отдел с новой строки.</small>
             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>

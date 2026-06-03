@@ -37,11 +37,11 @@
                     <td>{{ $article->published_at ? $article->published_at->format('d.m.Y') : '—' }}</td>
                     <td class="actions">
                         @if($article->section->slug === 'news')
-                            <a href="{{ route('news.show', $article->slug) }}" class="btn btn-sm" target="_blank">Просмотр</a>
+                            <a href="{{ route('news.show', $article->slug) }}" class="btn btn-sm">Просмотр</a>
                         @elseif($article->section->slug === 'go-chs')
-                            <a href="{{ route('go-chs.show', $article->slug) }}" class="btn btn-sm" target="_blank">Просмотр</a>
+                            <a href="{{ route('go-chs.show', $article->slug) }}" class="btn btn-sm">Просмотр</a>
                         @else
-                            <a href="{{ route('articles.show', [$article->section->slug, $article->slug]) }}" class="btn btn-sm" target="_blank">Просмотр</a>
+                            <a href="{{ route('articles.show', [$article->section->slug, $article->slug]) }}" class="btn btn-sm">Просмотр</a>
                         @endif
                         <a href="{{ route('staff.articles.edit', $article) }}" class="btn btn-warning btn-sm">Редактировать</a>
                         <form action="{{ route('staff.articles.destroy', $article) }}" method="POST" style="display: inline-block;">

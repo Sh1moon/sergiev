@@ -12,7 +12,7 @@
         @method('PUT')
         <div class="form-group">
             <label class="form-label">Содержимое раздела</label>
-            <textarea name="body" class="form-control" rows="25">{{ old('body', $item->body) }}</textarea>
+            <textarea name="body" class="form-control js-summernote" rows="25">{{ old('body', $item->body) }}</textarea>
             <small>Можно использовать HTML: &lt;p&gt;, &lt;h3&gt;, &lt;a href=""&gt;, &lt;strong&gt; и т.д.</small>
             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>

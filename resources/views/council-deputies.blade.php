@@ -15,8 +15,8 @@
             </div>
             @endif
             <div class="deputy-name">{{ $deputy->name }}</div>
-            @if($deputy->info)<div class="deputy-info">{{ $deputy->info }}</div>@endif
-            @if($deputy->contacts)<div class="deputy-contacts">{!! nl2br(e($deputy->contacts)) !!}</div>@endif
+            @if($deputy->info)<div class="deputy-info">{!! $deputy->info !!}</div>@endif
+            @if($deputy->contacts)<div class="deputy-contacts">{!! $deputy->contacts !!}</div>@endif
         </div>
         @empty
         <p>Список депутатов пока не заполнен.</p>

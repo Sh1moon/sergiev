@@ -23,7 +23,12 @@
                         @foreach($categoryItems as $num => $item)
                         <tr>
                             <td>{{ $num + 1 }}</td>
-                            <td>{{ $item->person_name }}{{ $item->person_info ? ', ' . $item->person_info : '' }}</td>
+                            <td>
+                                {{ $item->person_name }}
+                                @if($item->person_info)
+                                    <div class="honorary-person-info">{!! $item->person_info !!}</div>
+                                @endif
+                            </td>
                             <td>{{ $item->awarded_by }}</td>
                         </tr>
                         @endforeach
@@ -57,5 +62,9 @@
 .honorary-table th { background: #1a3c1a; color: #fafffa; font-weight: 600; }
 .honorary-table tbody tr:hover { background: #f9f9f9; }
 .honorary-table td:first-child { font-weight: 500; color: #1a3c1a; width: 40px; }
+.honorary-person-info p { margin: 0.4em 0 0; }
+.honorary-person-info ul, .honorary-person-info ol { margin: 0.5em 0 0.5em 1.2em; padding-left: 1em; }
+.honorary-person-info ul { list-style: disc; }
+.honorary-person-info ol { list-style: decimal; }
 </style>
 @endsection
